@@ -1,0 +1,93 @@
+import java.util.Scanner;
+
+public class _02_The_Gambler
+{
+    public static void main(String[] args)
+    {
+       Scanner scanner = new Scanner(System.in);
+       int gamblerRow = 0;
+       int gamblerCol = 0;
+       boolean isFind = false;
+       int amount = 100;
+       int indexCol = -1;
+       int size = Integer.parseInt(scanner.nextLine());
+       String[][] matrix = new String[size][size];
+       for(int row = 0; row < size; row++)
+       {
+           String input = scanner.nextLine();
+           String[] arr = input.split("");
+           matrix[row] = arr;
+           indexCol = input.indexOf("G");
+           if(indexCol >= 0 && !isFind)
+           {
+               gamblerRow = row;
+               gamblerCol = indexCol;
+               isFind = true;
+           }
+       }
+
+       boolean isValidIndex = gamblerRow >= 0 && gamblerRow < size && gamblerCol >= 0 && gamblerCol < size;
+        String command = scanner.nextLine();
+       while(!command.equals("end"))
+       {
+           //up", "down", "left" and "right"
+           matrix[gamblerRow][gamblerCol] = "-";
+
+           if(command.equals("up"))
+           {
+               gamblerRow--;
+           }
+           if(command.equals("down"))
+           {
+               gamblerRow++;
+           }
+           if(command.equals("left"))
+           {
+               gamblerCol--;
+           }
+           if(command.equals("right"))
+           {
+               gamblerCol++;
+           }
+           if(matrix[gamblerRow][gamblerCol].equals("P"))
+           {
+               amount -= 200;
+           }
+           if(!isValidIndex || amount <= 0)
+           {
+               System.out.println("Game over! You lost everything!");
+               return;
+           }
+           if(matrix[gamblerRow][gamblerCol].equals("W"))
+           {
+               amount += 100;
+
+           }
+           if(matrix[gamblerRow][gamblerCol].equals("J"))
+           {
+               amount += 100000;
+               System.out.println("You win the Jackpot!");
+               System.out.printf("End of the game. Total amount: %d$%n", amount);
+               break;
+           }
+           command = scanner.nextLine();
+       }
+       if(command.equals("end"))
+       {
+           System.out.printf("End of the game. Total amount: %d$%n", amount);
+       }
+       matrix[gamblerRow][gamblerCol] = "G";
+       printFinalState(matrix, size);
+    }
+    public static void printFinalState(String[][] matrix, int size)
+    {
+        for(int row = 0; row < size; row++)
+        {
+            for(int col = 0; col < size; col++)
+            {
+                System.out.print(matrix[row][col]);
+            }
+            System.out.println();
+        }
+    }
+}
