@@ -1,0 +1,131 @@
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.Scanner;
+import java.util.stream.Collectors;
+
+public class _01_Temple_of_Doom
+{
+    public static void main(String[] args)
+    {
+        Scanner scanner = new Scanner(System.in);
+        List<Integer> tools = Arrays.stream(scanner.nextLine().split(" "))
+                .map(Integer::parseInt).collect(Collectors.toList());
+        List<Integer> substances = Arrays.stream(scanner.nextLine().split(" "))
+                .map(Integer::parseInt).collect(Collectors.toList());
+        Collections.reverse(substances);
+        List<Integer> challenges = Arrays.stream(scanner.nextLine().split(" "))
+                .map(Integer::parseInt).collect(Collectors.toList());
+        while(!substances.isEmpty() && !challenges.isEmpty() && !tools.isEmpty())
+        {
+            int product = tools.get(0) * substances.get(0);
+            if(challenges.contains(product))
+            {
+                challenges = removeProductFromChallenges(challenges, product);
+                tools.remove(0);
+                substances.remove(0);
+                if(challenges.isEmpty())
+                {
+                    System.out.println("Harry found an ostracon, which is dated to the 6th century BCE.");
+                    break;
+                }
+            }
+            else
+            {
+                 tools = increaseToolAndAddBackToTools(tools);
+                 substances.set(0, substances.get(0) - 1);
+                 if(substances.get(0) == 0)
+                 {
+                     substances.remove(0);
+                 }
+                 if(substances.isEmpty())
+                 {
+                     System.out.println("Harry is lost in the temple. Oblivion awaits him.");
+                     break;
+                 }
+            }
+        }
+
+
+       printFinalState(tools, substances, challenges);
+
+
+    }
+    public static  List<Integer> removeProductFromChallenges(List<Integer> challenges,  int product)
+    {
+        for(int i = 0; i < challenges.size(); i++)
+        {
+            if(challenges.get(i) == product)
+            {
+                challenges.remove(i);
+                break;
+            }
+        }
+        return challenges;
+    }
+    public static List<Integer> increaseToolAndAddBackToTools(List<Integer> tools)
+    {
+        int current = tools.get(0) + 1;
+        tools.remove(0);
+        tools.add(current);
+        return tools;
+    }
+    public static void printFinalState(List<Integer> tools, List<Integer> substances, List<Integer> challenges)
+    {
+        if(!tools.isEmpty())
+        {
+            System.out.print("Tools: ");
+            int counter = 0;
+            for(Integer tool : tools)
+            {
+                if(counter < tools.size() - 1)
+                {
+                    System.out.print(tool + ", ");
+                }
+                else
+                {
+                    System.out.print(tool);
+                }
+                counter++;
+            }
+            System.out.println();
+        }
+        if(!substances.isEmpty())
+        {
+
+            System.out.print("Substances: ");
+            int counter = 0;
+            for(Integer substance : substances)
+            {
+                if(counter < substances.size() - 1)
+                {
+                    System.out.print(substance + ", ");
+                }
+                else
+                {
+                    System.out.print(substance);
+                }
+                counter++;
+            }
+            System.out.println();
+        }
+        if(!challenges.isEmpty())
+        {
+            System.out.print("Challenges: ");
+            int counter = 0;
+            for(Integer challenge : challenges)
+            {
+                if(counter < challenges.size() - 1)
+                {
+                    System.out.print(challenge + ", ");
+                }
+                else
+                {
+                    System.out.print(challenge);
+                }
+                counter++;
+            }
+            System.out.println();
+        }
+    }
+}
