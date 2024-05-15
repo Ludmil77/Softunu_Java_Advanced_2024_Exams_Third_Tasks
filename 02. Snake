@@ -1,0 +1,113 @@
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
+
+public class _02_Snake
+{
+    public static void main(String[] args)
+    {
+         Scanner scanner = new Scanner(System.in);
+         int size = Integer.parseInt(scanner.nextLine());
+         int rowS = 0;
+         int colS = 0;
+         List<Integer> burrows = new ArrayList<>();
+         int foodCounter = 0;
+         String[][] matrix = new String[size][size];
+         for(int row = 0; row < size; row++)
+         {
+             String input = scanner.nextLine();
+             String[] arr = input.split("");
+             matrix[row] = arr;
+             if(input.contains("S"))
+             {
+                 rowS = row;
+                 colS = input.indexOf("S");
+             }
+         }
+         burrows = findBurrows(matrix, size);
+
+         while(true)
+         {
+             matrix[rowS][colS] = ".";
+             String command = scanner.nextLine();
+             if(command.equals("up"))
+             {
+                 rowS--;
+             }
+             if(command.equals("down"))
+             {
+                 rowS++;
+             }
+             if(command.equals("left"))
+             {
+                 colS--;
+             }
+             if(command.equals("right"))
+             {
+                 colS++;
+             }
+             boolean isInvalidRowCol = rowS < 0 || rowS > size - 1 || colS < 0 || colS > size - 1;
+             if(isInvalidRowCol)
+             {
+                 System.out.println("Game over!");
+                 break;
+             }
+             if(matrix[rowS][colS].equals("B"))
+             {
+                 matrix[rowS][colS] = ".";
+                 if(rowS == burrows.get(0) && colS == burrows.get(1))
+                 {
+                     rowS = burrows.get(2);
+                     colS = burrows.get(3);
+                 }
+                 else
+                 {
+                     rowS = burrows.get(0);
+                     colS = burrows.get(1);
+                 }
+
+             }
+             if(matrix[rowS][colS].equals("*"))
+             {
+                 foodCounter++;
+                 if(foodCounter == 10)
+                 {
+                     matrix[rowS][colS] = "S";
+                     System.out.println("You won! You fed the snake.");
+                     break;
+                 }
+
+             }
+             matrix[rowS][colS] = ".";
+         }
+         System.out.printf("Food eaten: %d%n", foodCounter);
+         printFinalState(matrix, size);
+    }
+    public static List<Integer> findBurrows(String[][] matrix, int size)
+    {
+        List<Integer> burrows = new ArrayList<>();
+        for(int row = 0; row < size; row++)
+        {
+            for(int col = 0; col < size; col++)
+            {
+                if(matrix[row][col].equals("B"))
+                {
+                    burrows.add(row);
+                    burrows.add(col);
+                }
+            }
+        }
+        return burrows;
+    }
+    public static void printFinalState(String[][] matrix, int size)
+    {
+        for(int row = 0; row < size; row++)
+        {
+            for(int col = 0; col < size; col++)
+            {
+               System.out.print(matrix[row][col]);
+            }
+            System.out.println();
+        }
+    }
+}
