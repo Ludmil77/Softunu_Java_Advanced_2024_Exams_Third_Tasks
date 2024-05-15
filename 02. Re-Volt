@@ -1,0 +1,134 @@
+import java.util.Scanner;
+
+public class _02_Re_Volt
+{
+    public static void main(String[] args)
+    {
+         Scanner scanner = new Scanner(System.in);
+         int rowF = 0;
+         int colF = 0;
+         int size = Integer.parseInt(scanner.nextLine());
+         int countCommands = Integer.parseInt(scanner.nextLine());
+         String[][] matrix = new String[size][size];
+         for(int row = 0; row < size; row++)
+         {
+             String input = scanner.nextLine();
+             String[] arr = input.split("");
+             matrix[row] = arr;
+             if(input.contains("f"))
+             {
+                 rowF = row;
+                 colF = input.indexOf("f");
+             }
+         }
+         matrix[rowF][colF] = "-";
+         for(int i = 0; i < countCommands; i++)
+         {
+             String command = scanner.nextLine();
+             int previousRow = rowF;
+             int previousCol = colF;
+             int bonusRow = 0;
+             int bonusCol = 0;
+             if(command.equals("up"))
+             {
+                 rowF--;
+                 rowF = checkIfRowIsValid(rowF, command, size);
+                 bonusRow = rowF - 1;
+                 bonusRow = checkIfRowIsValid(bonusRow, command, size);
+                 bonusCol = colF;
+             }
+             if(command.equals("down"))
+             {
+                 rowF++;
+                 rowF = checkIfRowIsValid(rowF, command, size);
+                 bonusRow = rowF + 1;
+                 bonusRow = checkIfRowIsValid(bonusRow, command, size);
+                 bonusCol = colF;
+             }
+             if(command.equals("left"))
+             {
+                 colF--;
+                 colF = checkIfColIsValid(colF, command, size);
+                 bonusCol = colF - 1;
+                 bonusCol = checkIfColIsValid(bonusCol, command, size);
+                 bonusRow = rowF;
+             }
+             if(command.equals("right"))
+             {
+                 colF++;
+                 colF = checkIfColIsValid(colF, command, size);
+                 bonusCol = colF + 1;
+                 bonusCol = checkIfColIsValid(bonusCol, command, size);
+                 bonusRow = rowF;
+             }
+             if(matrix[rowF][colF].equals("T"))
+             {
+                 rowF = previousRow;
+                 colF = previousCol;
+             }
+             if(matrix[rowF][colF].equals("B"))
+             {
+                 rowF = bonusRow;
+                 colF = bonusCol;
+             }
+             if(matrix[rowF][colF].equals("F"))
+             {
+                 System.out.println("Player won!");
+                 break;
+             }
+         }
+         if(!matrix[rowF][colF].equals("F"))
+         {
+             System.out.println("Player lost!");
+         }
+         matrix[rowF][colF] = "f";
+         printFinalState(matrix, size);
+    }
+    public static Integer checkIfRowIsValid(int row, String command, int size)
+    {
+        if(command.equals("up"))
+        {
+            if(row < 0)
+            {
+                row = size - 1;
+            }
+        }
+        else if(command.equals("down"))
+        {
+            if(row > size - 1)
+            {
+                row = 0;
+            }
+        }
+        return row;
+    }
+    public static Integer checkIfColIsValid(int col, String command, int size)
+    {
+        if(command.equals("left"))
+        {
+            if(col < 0)
+            {
+                col = size - 1;
+            }
+        }
+        else if(command.equals("right"))
+        {
+            if(col > size - 1)
+            {
+                col = 0;
+            }
+        }
+        return col;
+    }
+    public static void printFinalState(String[][] matrix, int size)
+    {
+        for(int row = 0; row < size; row++)
+        {
+            for(int col = 0; col < size; col++)
+            {
+                System.out.print(matrix[row][col]);
+            }
+            System.out.println();
+        }
+    }
+}
