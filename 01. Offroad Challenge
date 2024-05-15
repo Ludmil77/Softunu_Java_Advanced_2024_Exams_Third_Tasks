@@ -1,0 +1,83 @@
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.Scanner;
+import java.util.stream.Collectors;
+
+public class _01_Offroad_Challenge
+{
+    public static void main(String[] args)
+    {
+        Scanner scanner = new Scanner(System.in);
+        List<Integer> initialFuel = Arrays.stream(scanner.nextLine().split(" "))
+                .map(Integer::parseInt).collect(Collectors.toList());
+        List<Integer> indexes = Arrays.stream(scanner.nextLine().split(" "))
+                .map(Integer::parseInt).collect(Collectors.toList());
+        List<Integer> quantities = Arrays.stream(scanner.nextLine().split(" "))
+                .map(Integer::parseInt).collect(Collectors.toList());
+        int counter = 0;
+        int fail = 0;
+        Collections.reverse(initialFuel);
+        while(true)
+        {
+            if(initialFuel.isEmpty() || indexes.isEmpty() || quantities.isEmpty())
+            {
+                break;
+            }
+            if(initialFuel.get(0) - indexes.get(0) >= quantities.get(0))
+            {
+                counter++;
+                initialFuel.remove(0);
+                indexes.remove(0);
+                quantities.remove(0);
+            }
+            else
+            {
+                fail++;
+                break;
+            }
+
+        }
+        if(counter > 0)
+        {
+            for(int i = 1; i <= counter; i++)
+            {
+                System.out.printf("John has reached: Altitude %d%n", i);
+            }
+        }
+
+        if(fail > 0)
+        {
+            System.out.printf("John did not reach: Altitude %d%n", counter + 1);
+            
+        }
+
+
+        if(counter > 0 && fail > 0)
+        {
+            System.out.println("John failed to reach the top.");
+            System.out.print("Reached altitudes: ");
+            for(int i = 1; i <= counter; i++)
+            {
+                if(i < counter)
+                {
+                    System.out.printf("Altitude %d, ", i);
+                }
+                else
+                {
+                    System.out.printf("Altitude %d", i);
+                }
+            }
+        }
+        if(counter == 0)
+        {
+            System.out.println("John failed to reach the top.");
+            System.out.println("John didn't reach any altitude.");
+        }
+
+        if(counter > 0 && fail == 0)
+        {
+            System.out.println("John has reached all the altitudes and managed to reach the top!");
+        }
+    }
+}
