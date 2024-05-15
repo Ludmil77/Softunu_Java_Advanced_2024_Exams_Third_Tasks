@@ -1,0 +1,97 @@
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.Scanner;
+import java.util.stream.Collectors;
+
+public class _01_Worms_And_Holes
+{
+    public static void main(String[] args)
+    {
+         Scanner scanner = new Scanner(System.in);
+        List<Integer> worms = Arrays.stream(scanner.nextLine().split(" "))
+                .map(Integer::parseInt).collect(Collectors.toList());
+        List<Integer> holes = Arrays.stream(scanner.nextLine().split(" "))
+                .map(Integer::parseInt).collect(Collectors.toList());
+        Collections.reverse(worms);
+        int wormsCount = 0;
+        int matches = 0;
+        while(true)
+        {
+            if(worms.isEmpty() || holes.isEmpty())
+            {
+                break;
+            }
+            if(worms.get(0) == holes.get(0))
+            {
+                matches++;
+                worms.remove(0);
+                holes.remove(0);
+                continue;
+            }
+            else
+            {
+                holes.remove(0);
+                worms.set(0, worms.get(0) - 3);
+                wormsCount++;
+                if(worms.get(0) <= 0)
+                {
+                    worms.remove(0);
+                }
+            }
+        }
+        Collections.reverse(worms);
+       if(matches > 0)
+       {
+           System.out.printf("Matches: %d%n", matches);
+       }
+       if(matches == 0)
+       {
+           System.out.println("There are no matches.");
+       }
+       if(wormsCount == 0 && worms.isEmpty())
+       {
+           System.out.println("Every worm found a suitable hole!");
+       }
+       if(worms.isEmpty() && wormsCount > 0)
+       {
+           System.out.println("Worms left: none");
+       }
+       if(!worms.isEmpty())
+       {
+           System.out.print("Worms left: ");
+           for(int i = 0; i < worms.size(); i++)
+           {
+               if(i < worms.size() - 1)
+               {
+                   System.out.print(worms.get(i) + ", ");
+               }
+               else
+               {
+                   System.out.print(worms.get(i));
+               }
+           }
+           System.out.println();
+       }
+       if(holes.isEmpty())
+       {
+           System.out.println("Holes left: none");
+       }
+       if(!holes.isEmpty())
+       {
+           System.out.print("Holes left: ");
+           for(int i = 0; i < holes.size(); i++)
+           {
+               if(i < holes.size() - 1)
+               {
+                   System.out.print(holes.get(i) + ", ");
+               }
+               else
+               {
+                   System.out.print(holes.get(i));
+               }
+           }
+           System.out.println();
+       }
+    }
+}
