@@ -1,0 +1,97 @@
+import java.util.*;
+import java.util.stream.Collectors;
+
+public class _01_Dating_App
+{
+    public static void main(String[] args)
+    {
+         Scanner scanner = new Scanner(System.in);
+         int matches = 0;
+        List<Integer> males = Arrays.stream(scanner.nextLine().split("\\s+"))
+                .map(Integer::parseInt).collect(Collectors.toList());
+        List<Integer> females = Arrays.stream(scanner.nextLine().split("\\s+"))
+                .map(Integer::parseInt).collect(Collectors.toList());
+        Collections.reverse(males);
+        males = checkForNonPositivesAndDivisibleBy25(males);
+        females = checkForNonPositivesAndDivisibleBy25(females);
+        while(!males.isEmpty() && !females.isEmpty())
+        {
+
+             if(males.get(0) == females.get(0))
+             {
+                 matches++;
+                 males.remove(0);
+                 females.remove(0);
+             }
+             else
+             {
+                 females.remove(0);
+                 males.set(0, males.get(0) - 2);
+                 males = checkForNonPositivesAndDivisibleBy25(males);
+             }
+        }
+       
+        System.out.printf("Matches: %d%n", matches);
+        printMalesLeft(males);
+        printFemalesLeft(females);
+    }
+    public static List<Integer> checkForNonPositivesAndDivisibleBy25(List<Integer> items)
+    {
+
+        int next25 = 0;
+        List<Integer> temp = new ArrayList<>();
+        for(Integer item : items)
+        {
+            if(next25 == 1)
+            {
+                next25 = 0;
+                continue;
+            }
+            if(item > 0)
+            {
+                if(item >= 25 && item % 25 == 0)
+                {
+                    next25 = 1;
+                    continue;
+                }
+
+                temp.add(item);
+            }
+
+        }
+        return temp;
+    }
+    public static void printMalesLeft(List<Integer> males)
+    {
+        List<String> temp = new ArrayList<>();
+        if(males.isEmpty())
+        {
+            System.out.println("Males left: none");
+        }
+        else
+        {
+            for(Integer male : males)
+            {
+                temp.add(String.valueOf(male));
+            }
+            System.out.println("Males left: " + String.join(", ", temp));
+        }
+    }
+    public static void printFemalesLeft(List<Integer> females)
+    {
+        List<String> temp = new ArrayList<>();
+        if(females.isEmpty())
+        {
+            System.out.println("Females left: none");
+        }
+        else
+        {
+            for(Integer female : females)
+            {
+                temp.add(String.valueOf(female));
+            }
+            System.out.println("Females left: " + String.join(", ", temp));
+        }
+
+    }
+}
