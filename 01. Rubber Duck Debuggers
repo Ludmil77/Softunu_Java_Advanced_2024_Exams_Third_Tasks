@@ -1,0 +1,57 @@
+import java.util.*;
+import java.util.stream.Collectors;
+
+
+public class Main
+{
+    public static void main(String[] args)
+    {
+         Scanner scanner = new Scanner(System.in);
+        Map<String, Integer> items = new LinkedHashMap<>();
+        items.put("Darth Vader Ducky", 0);
+        items.put("Thor Ducky", 0);
+        items.put("Big Blue Rubber Ducky", 0);
+        items.put("Small Yellow Rubber Ducky", 0);
+        List<Integer> programmersTime = Arrays.stream(scanner.nextLine().split(" "))
+                .map(Integer::parseInt).collect(Collectors.toList());
+        List<Integer> numberOfTasks = Arrays.stream(scanner.nextLine().split(" "))
+                .map(Integer::parseInt).collect(Collectors.toList());
+        Collections.reverse(numberOfTasks);
+        while(!programmersTime.isEmpty() && !numberOfTasks.isEmpty())
+        {
+            int product = programmersTime.get(0) * numberOfTasks.get(0);
+            if(product > 240)
+            {
+                numberOfTasks.set(0, numberOfTasks.get(0) - 2);
+                programmersTime.add(programmersTime.get(0));
+                programmersTime.remove(0);
+            }
+            else
+            {
+                if(product <= 60)
+                {
+                    items.put("Darth Vader Ducky", items.get("Darth Vader Ducky") + 1);
+                }
+                else if(product <= 120)
+                {
+                    items.put("Thor Ducky", items.get("Thor Ducky") + 1);
+                }
+                else if(product <= 180)
+                {
+                    items.put("Big Blue Rubber Ducky", items.get("Big Blue Rubber Ducky") + 1);
+                }
+                else if(product <= 240)
+                {
+                    items.put("Small Yellow Rubber Ducky", items.get("Small Yellow Rubber Ducky") + 1);
+                }
+                programmersTime.remove(0);
+                numberOfTasks.remove(0);
+            }
+        }
+        System.out.println("Congratulations, all tasks have been completed! Rubber ducks rewarded:");
+        System.out.printf("Darth Vader Ducky: %d%n", items.get("Darth Vader Ducky"));
+        System.out.printf("Thor Ducky: %d%n", items.get("Thor Ducky"));
+        System.out.printf("Big Blue Rubber Ducky: %d%n", items.get("Big Blue Rubber Ducky"));
+        System.out.printf("Small Yellow Rubber Ducky: %d%n", items.get("Small Yellow Rubber Ducky"));
+    }
+}
