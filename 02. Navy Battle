@@ -1,0 +1,78 @@
+import java.util.Scanner;
+
+public class _02_Navy_Battle
+{
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        int size = Integer.parseInt(scanner.nextLine());
+        int rowS = 0;
+        int colS = 0;
+        int mine = 0;
+        int cruise = 0;
+        String[][] matrix = new String[size][size];
+        for(int row = 0; row < size; row++)
+        {
+            String input = scanner.nextLine();
+            String[] arr = input.split("");
+            matrix[row] = arr;
+            if(input.contains("S"))
+            {
+                rowS = row;
+                colS = input.indexOf("S");
+            }
+        }
+        matrix[rowS][colS] = "-";
+        while(true)
+        {
+            String command = scanner.nextLine();
+            if(command.equals("up"))
+            {
+                rowS--;
+            }
+            if(command.equals("down"))
+            {
+                rowS++;
+            }
+            if(command.equals("left"))
+            {
+                colS--;
+            }
+            if(command.equals("right"))
+            {
+                colS++;
+            }
+            if(matrix[rowS][colS].equals("*"))
+            {
+                mine++;
+                if(mine == 3)
+                {
+                    System.out.printf("Mission failed, U-9 disappeared! Last known coordinates [%d, %d]!%n", rowS, colS);
+                    break;
+                }
+            }
+            if(matrix[rowS][colS].equals("C"))
+            {
+                cruise++;
+                if(cruise == 3)
+                {
+                    System.out.println("Mission accomplished, U-9 has destroyed all battle cruisers of the enemy!");
+                    break;
+                }
+            }
+            matrix[rowS][colS] = "-";
+        }
+        matrix[rowS][colS] = "S";
+        printFinalState(matrix, size);
+    }
+    public static void printFinalState(String[][] matrix, int size)
+    {
+        for(int row = 0; row < size; row++)
+        {
+            for(int col = 0; col < size; col++)
+            {
+                System.out.print(matrix[row][col]);
+            }
+            System.out.println();
+        }
+    }
+}
