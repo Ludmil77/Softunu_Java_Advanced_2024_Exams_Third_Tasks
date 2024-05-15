@@ -1,0 +1,113 @@
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
+
+public class _02_Escape_the_Maze
+{
+    public static void main(String[] args)
+    {
+        Scanner scanner = new Scanner(System.in);
+        int size = Integer.parseInt(scanner.nextLine());
+        int playerRow = 0;
+        int playerCol = 0;
+        int health = 100;
+        String[][] matrix = new String[size][size];
+        for(int row = 0 ; row < size; row++)
+        {
+            String[] arr = scanner.nextLine().split("");
+            matrix[row] = arr;
+        }
+        List<Integer> rowCol = checkPlayerInitialPositions(matrix, size);
+        playerRow = rowCol.get(0);
+        playerCol = rowCol.get(1);
+        matrix[playerRow][playerCol] = "-";
+        while(true)
+        {
+            String command = scanner.nextLine();
+            //up", "down", "right", and "left".
+            if(command.equals("up"))
+            {
+                if(playerRow > 0)
+                {
+                    playerRow--;
+                }
+            }
+            if(command.equals("down"))
+            {
+                if(playerRow < size - 1)
+                {
+                    playerRow++;
+                }
+            }
+            if(command.equals("right"))
+            {
+                if(playerCol < size - 1)
+                {
+                    playerCol++;
+                }
+            }
+            if(command.equals("left"))
+            {
+                if(playerCol > 0)
+                {
+                    playerCol--;
+                }
+            }
+            if(matrix[playerRow][playerCol].equals("M"))
+            {
+                health -= 40;
+                if(health <= 0)
+                {
+                    System.out.println("Player is dead. Maze over!");
+                    System.out.println("Player's health: 0 units");
+                    break;
+                }
+                matrix[playerRow][playerCol] = "-";
+            }
+            if(matrix[playerRow][playerCol].equals("H"))
+            {
+                health += 15;
+                if(health > 100)
+                {
+                    health = 100;
+                }
+                matrix[playerRow][playerCol] = "-";
+            }
+            if(matrix[playerRow][playerCol].equals("X"))
+            {
+                System.out.println("Player escaped the maze. Danger passed!");
+                System.out.printf("Player's health: %d units%n", health);
+                break;
+            }
+        }
+        matrix[playerRow][playerCol] = "P";
+        printFinalState(matrix, size);
+    }
+    public static List<Integer> checkPlayerInitialPositions(String[][] matrix, int size)
+    {
+        List<Integer> rowCol = new ArrayList();
+        for(int row = 0; row < size; row++)
+        {
+            for(int col = 0; col < size; col++)
+            {
+                if(matrix[row][col].equals("P"))
+                {
+                    rowCol.add(row);
+                    rowCol.add(col);
+                }
+            }
+        }
+        return rowCol;
+    }
+    public static void printFinalState(String[][] matrix, int size)
+    {
+        for(int row = 0; row < size; row++)
+        {
+            for(int col = 0; col < size; col++)
+            {
+                System.out.print(matrix[row][col]);
+            }
+            System.out.println();
+        }
+    }
+}
