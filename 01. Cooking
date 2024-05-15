@@ -1,0 +1,100 @@
+import java.util.*;
+import java.util.stream.Collectors;
+
+public class _01_Cooking
+{
+    public static void main(String[] args)
+    {
+         Scanner scanner = new Scanner(System.in);
+         Map<String, Integer> items = new TreeMap<>();
+         Set<String> names = new HashSet<>();
+         items.put("Bread", 0); items.put("Cake", 0); items.put("Pastry", 0); items.put("Fruit Pie", 0);
+        List<Integer> liquids = Arrays.stream(scanner.nextLine().split(" "))
+                .map(Integer::parseInt).collect(Collectors.toList());
+        List<Integer> ingredients = Arrays.stream(scanner.nextLine().split(" "))
+                .map(Integer::parseInt).collect(Collectors.toList());
+        Collections.reverse(ingredients);
+        while(!liquids.isEmpty() && !ingredients.isEmpty())
+        {
+            int sum = liquids.get(0) + ingredients.get(0);
+            if(sum == 25)
+            {
+                items.put("Bread", items.get("Bread") + 1);
+                names.add("Bread");
+            }
+            else if(sum == 50)
+            {
+                items.put("Cake", items.get("Cake") + 1);
+                names.add("Cake");
+            }
+            else if(sum == 75)
+            {
+                items.put("Pastry", items.get("Pastry") + 1);
+                names.add("Pastry");
+            }
+            else if(sum == 100)
+            {
+                items.put("Fruit Pie", items.get("Fruit Pie") + 1);
+                names.add("Fruit Pie");
+            }
+            else
+            {
+                liquids.remove(0);
+                ingredients.set(0, ingredients.get(0) + 3);
+                continue;
+            }
+            liquids.remove(0);
+            ingredients.remove(0);
+        }
+        if(names.size() == 4)
+        {
+            System.out.println("Wohoo! You succeeded in cooking all the food!");
+        }
+        if(names.size() < 4)
+        {
+            System.out.println("Ugh, what a pity! You didn't have enough materials to cook everything.");
+        }
+        printLiquids(liquids);
+        printIngredients(ingredients);
+        printItems(items);
+    }
+    public static void printLiquids(List<Integer> liquids)
+    {
+        if(liquids.isEmpty())
+        {
+            System.out.println("Liquids left: none");
+        }
+        else
+        {
+            List<String> temp = new ArrayList<>();
+            for(Integer liquid : liquids)
+            {
+                temp.add(String.valueOf(liquid));
+            }
+            System.out.println("Liquids left: " + String.join(", ", temp));
+        }
+    }
+    public static void printIngredients(List<Integer> ingredients)
+    {
+        if(ingredients.isEmpty())
+        {
+            System.out.println("Ingredients left: none");
+        }
+        else
+        {
+            List<String> temp = new ArrayList<>();
+            for(Integer ingredient : ingredients)
+            {
+                temp.add(String.valueOf(ingredient));
+            }
+            System.out.println("Ingredients left: " + String.join(", ", temp));
+        }
+    }
+    public static void printItems( Map<String, Integer> items)
+    {
+        for(String key : items.keySet())
+        {
+            System.out.printf("%s: %d%n", key, items.get(key));
+        }
+    }
+}
