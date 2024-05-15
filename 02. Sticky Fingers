@@ -1,0 +1,84 @@
+import java.util.Scanner;
+
+public class _02_Sticky_Fingers
+{
+    public static void main(String[] args)
+    {
+        Scanner scanner = new Scanner(System.in);
+        int size = Integer.parseInt(scanner.nextLine());
+        String[] directions = scanner.nextLine().split(",");
+        int rowD = 0;
+        int colD = 0;
+        int money = 0;
+        String[][] matrix = new String[size][size];
+        for(int row = 0; row < size; row++)
+        {
+            String input = scanner.nextLine().replace(" ", "");
+            String[] arr = input.split("");
+            matrix[row] = arr;
+            if(input.contains("D"))
+            {
+                rowD = row;
+                colD = input.indexOf("D");
+            }
+        }
+        matrix[rowD][colD] = "+";
+        for(int i = 0; i < directions.length; i++)
+        {
+             int previousRow = rowD;
+             int previousCol = colD;
+             String direction = directions[i];
+             if(direction.equals("up"))
+             {
+                 rowD--;
+             }
+             if(direction.equals("down"))
+             {
+                 rowD++;
+             }
+             if(direction.equals("left"))
+             {
+                 colD--;
+             }
+             if(direction.equals("right"))
+             {
+                 colD++;
+             }
+             if(rowD < 0 || rowD > size - 1 || colD < 0 || colD > size - 1)
+             {
+                 rowD = previousRow;
+                 colD = previousCol;
+                 System.out.println("You cannot leave the town, there is police outside!");
+                 continue;
+             }
+             if(matrix[rowD][colD].equals("$"))
+             {
+                 matrix[rowD][colD] = "+";
+                 money += rowD * colD;
+                 System.out.printf("You successfully stole %d$.%n", rowD * colD);
+                 continue;
+             }
+             if(matrix[rowD][colD].equals("P"))
+             {
+                 System.out.printf("You got caught with %d$, and you are going to jail.%n", money);
+                 matrix[rowD][colD] = "#";
+                 printFinalState(matrix, size);
+                 return;
+             }
+        }
+        System.out.printf("Your last theft has finished successfully with %d$ in your pocket.%n", money);
+        matrix[rowD][colD] = "D";
+        printFinalState(matrix, size);
+    }
+    public static void printFinalState(String[][] matrix, int size)
+    {
+        for(int row = 0; row < size; row++)
+        {
+            for(int col = 0; col < size; col++)
+            {
+                System.out.print(matrix[row][col] + " ");
+            }
+            System.out.println();
+        }
+    }
+}
