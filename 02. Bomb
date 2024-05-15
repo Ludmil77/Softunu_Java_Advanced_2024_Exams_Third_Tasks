@@ -1,0 +1,119 @@
+import java.util.Scanner;
+
+public class _02_Bomb
+{
+    public static void main(String[] args)
+    {
+        Scanner scanner = new Scanner(System.in);
+        int size = Integer.parseInt(scanner.nextLine());
+        String[] commands = scanner.nextLine().split(",");
+        int bombsCounter = 0;
+        int rowS = 0;
+        int colS = 0;
+        String[][] matrix = new String[size][size];
+        for(int row = 0; row < size; row++)
+        {
+            String input = scanner.nextLine().replace(" ", "");
+            String[] arr = input.split("");
+            matrix[row] = arr;
+            if(input.contains("s"))
+            {
+                rowS = row;
+                colS = input.indexOf("s");
+            }
+        }
+        bombsCounter = findBombCounter(matrix, size);
+        for(int i = 0; i < commands.length; i++)
+        {
+            String command = commands[i];
+            if(command.equals("up"))
+            {
+                rowS--;
+                rowS = checkIfRowIsValid(rowS, command, size);
+            }
+            if(command.equals("down"))
+            {
+                rowS++;
+                rowS = checkIfRowIsValid(rowS, command, size);
+            }
+            if(command.equals("left"))
+            {
+                colS--;
+                colS = checkIfColIsValid(colS, command, size);
+            }
+            if(command.equals("right"))
+            {
+                colS++;
+                colS = checkIfColIsValid(colS, command, size);
+            }
+            if(matrix[rowS][colS].equals("B"))
+            {
+                System.out.println("You found a bomb!");
+                matrix[rowS][colS] = "+";
+                bombsCounter--;
+                if(bombsCounter == 0)
+                {
+                    System.out.println("Congratulations! You found all bombs!");
+                    return;
+                }
+            }
+            if(matrix[rowS][colS].equals("e"))
+            {
+                System.out.printf("END! %d bombs left on the field%n", bombsCounter);
+                return;
+            }
+        }
+        System.out.printf("%d bombs left on the field. Sapper position: (%d,%d)%n", bombsCounter, rowS, colS);
+    }
+    public static Integer findBombCounter(String[][] matrix, int size)
+    {
+        int bombsCounter = 0;
+        for(int row = 0; row < size; row++)
+        {
+            for(int col = 0; col < size; col++)
+            {
+                if(matrix[row][col].equals("B"))
+                {
+                    bombsCounter++;
+                }
+            }
+        }
+        return bombsCounter;
+    }
+    public static Integer checkIfRowIsValid(int row, String command, int size)
+    {
+        if(command.equals("up"))
+        {
+            if(row < 0)
+            {
+                row = 0;
+            }
+        }
+        else if(command.equals("down"))
+        {
+            if(row > size - 1)
+            {
+                row = size - 1;
+            }
+        }
+        return row;
+    }
+    public static Integer checkIfColIsValid(int col, String command, int size)
+    {
+        if(command.equals("left"))
+        {
+            if(col < 0)
+            {
+                col = 0;
+            }
+        }
+        else if(command.equals("right"))
+        {
+            if(col > size - 1)
+            {
+                col = size - 1;
+            }
+        }
+        return col;
+    }
+}
