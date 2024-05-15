@@ -1,0 +1,129 @@
+import java.util.*;
+import java.util.stream.Collectors;
+
+public class _01_Food_Finder
+{
+    public static void main(String[] args)
+    {
+        Scanner scanner = new Scanner(System.in);
+        List<String> pear = new ArrayList<>();
+        pear.add("p"); pear.add("e"); pear.add("a"); pear.add("r");
+        List<String> flour = new ArrayList<>();
+        flour.add("f"); flour.add("l"); flour.add("o"); flour.add("u"); flour.add("r");
+        List<String> pork = new ArrayList<>();
+        pork.add("p"); pork.add("o"); pork.add("r"); pork.add("k");
+        List<String> olive = new ArrayList<>();
+        olive.add("o"); olive.add("l"); olive.add("i"); olive.add("v"); olive.add("e");
+        List<String> vowels = Arrays.stream(scanner.nextLine().split(" "))
+                .collect(Collectors.toList());
+        List<String> consonants = Arrays.stream(scanner.nextLine().split(" "))
+                .collect(Collectors.toList());
+        Collections.reverse(consonants);
+        while(!consonants.isEmpty())
+        {
+            String vowel = vowels.get(0);
+            String consonant = consonants.get(0);
+            if(!pear.isEmpty())
+            {
+                pear = checkIfPearContainsLetters(pear, vowel, consonant);
+            }
+            if(!flour.isEmpty())
+            {
+                flour = checkIfFlourContainsLetters(flour, vowel, consonant);
+            }
+            if(!pork.isEmpty())
+            {
+                pork = checkIfPorkContainsLetters(pork, vowel, consonant);
+            }
+            if(!olive.isEmpty())
+            {
+                olive = checkIfOliveContainsLetters(olive, vowel, consonant);
+            }
+            consonants.remove(0);
+            vowels.add(vowels.get(0));
+            vowels.remove(0);
+
+        }
+        List<String> foundWords = new ArrayList<>();
+        foundWords = findCountOfFoundWords(pear, flour, pork, olive);
+        System.out.printf("Words found: %d%n", foundWords.size());
+        for(String word : foundWords)
+        {
+            System.out.println(word);
+        }
+
+    }
+    public static  List<String> checkIfPearContainsLetters(List<String> pear,  String vowel,  String consonant)
+    {
+
+        for(int i = 0; i < pear.size(); i++)
+        {
+            if(pear.get(i).equals(vowel) || pear.get(i).equals(consonant))
+            {
+                pear.remove(i);
+                i--;
+            }
+        }
+        return pear;
+    }
+    public static  List<String> checkIfFlourContainsLetters(List<String> flour,  String vowel,  String consonant)
+    {
+
+        for(int i = 0; i < flour.size(); i++)
+        {
+            if(flour.get(i).equals(vowel) || flour.get(i).equals(consonant))
+            {
+                flour.remove(i);
+                i--;
+            }
+        }
+        return flour;
+    }
+    public static  List<String> checkIfPorkContainsLetters(List<String> pork,  String vowel,  String consonant)
+    {
+
+        for(int i = 0; i < pork.size(); i++)
+        {
+            if(pork.get(i).equals(vowel) || pork.get(i).equals(consonant))
+            {
+                pork.remove(i);
+                i--;
+            }
+        }
+        return pork;
+    }
+    public static  List<String> checkIfOliveContainsLetters(List<String> olive,  String vowel,  String consonant)
+    {
+
+        for(int i = 0; i < olive.size(); i++)
+        {
+            if(olive.get(i).equals(vowel) || olive.get(i).equals(consonant))
+            {
+                olive.remove(i);
+                i--;
+            }
+        }
+        return olive;
+    }
+    public static List<String> findCountOfFoundWords(List<String> pear, List<String> flour, List<String> pork, List<String> olive)
+    {
+        List<String> foundWords = new ArrayList<>();
+        if(pear.isEmpty())
+        {
+            foundWords.add("pear");
+        }
+        if(flour.isEmpty())
+        {
+            foundWords.add("flour");
+        }
+        if(pork.isEmpty())
+        {
+            foundWords.add("pork");
+        }
+        if(olive.isEmpty())
+        {
+            foundWords.add("olive");
+        }
+        return foundWords;
+    }
+}
