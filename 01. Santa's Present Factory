@@ -1,0 +1,135 @@
+import java.util.*;
+import java.util.stream.Collectors;
+
+public class _01_Santa_s_Present_Factory
+{
+    public static void main(String[] args)
+    {
+          Scanner scanner = new Scanner(System.in);
+          Map<String, Integer> crafts = new TreeMap<>();
+        List<Integer> materials = Arrays.stream(scanner.nextLine().split(" "))
+                .map(Integer::parseInt).collect(Collectors.toList());
+        List<Integer> magics = Arrays.stream(scanner.nextLine().split(" "))
+                .map(Integer::parseInt).collect(Collectors.toList());
+        Collections.reverse(materials);
+        materials = removeZeros(materials);
+        magics = removeZeros(magics);
+        while(!materials.isEmpty() && !magics.isEmpty())
+        {
+            int result = materials.get(0) * magics.get(0);
+            if(result == 150)
+            {
+                if(!crafts.containsKey("Doll"))
+                {
+                    crafts.put("Doll", 0);
+                }
+                crafts.put("Doll", crafts.get("Doll") + 1);
+            }
+            else if(result == 250)
+            {
+                if(!crafts.containsKey("Wooden train"))
+                {
+                    crafts.put("Wooden train", 0);
+                }
+                crafts.put("Wooden train", crafts.get("Wooden train") + 1);
+            }
+            else if(result == 300)
+            {
+                if(!crafts.containsKey("Teddy bear"))
+                {
+                    crafts.put("Teddy bear", 0);
+                }
+                crafts.put("Teddy bear", crafts.get("Teddy bear") + 1);
+            }
+            else if(result == 400)
+            {
+                if(!crafts.containsKey("Bicycle"))
+                {
+                    crafts.put("Bicycle", 0);
+                }
+                crafts.put("Bicycle", crafts.get("Bicycle") + 1);
+            }
+            else if(result < 0)
+            {
+                int sum = materials.get(0) + magics.get(0);
+                materials.remove(0);
+                magics.remove(0);
+                Collections.reverse(materials);
+                if(sum != 0)
+                {
+                    materials.add(sum);
+                }
+                Collections.reverse(materials);
+                continue;
+            }
+            else
+            {
+                materials.set(0, materials.get(0) + 15);
+                magics.remove(0);
+                continue;
+            }
+            materials.remove(0);
+            magics.remove(0);
+        }
+        if((crafts.containsKey("Doll") && crafts.containsKey("Wooden train")) ||
+                (crafts.containsKey("Teddy bear") && crafts.containsKey("Bicycle")))
+
+        {
+              System.out.println("The presents are crafted! Merry Christmas!");
+        }
+        else
+        {
+            System.out.println("No presents this Christmas!");
+        }
+        printMaterials(materials);
+        printMagic(magics);
+        printCrafts(crafts);
+    }
+    public static List<Integer> removeZeros(List<Integer> list)
+    {
+        List<Integer> temp = new ArrayList<>();
+        for(Integer num : list)
+        {
+            if(num != 0)
+            {
+                temp.add(num);
+            }
+        }
+        return temp;
+    }
+    public static void printMaterials(List<Integer> materials)
+    {
+        if(!materials.isEmpty())
+        {
+            List<String> temp = new ArrayList<>();
+            for(Integer material : materials)
+            {
+                temp.add(String.valueOf(material));
+            }
+            System.out.println("Materials left: " + String.join(", ", temp));
+        }
+    }
+    public static void printMagic(List<Integer> magics)
+    {
+        if(!magics.isEmpty())
+        {
+            List<String> temp = new ArrayList<>();
+            for(Integer magic : magics)
+            {
+                temp.add(String.valueOf(magic));
+            }
+            System.out.println("Magic left: " + String.join(", ", temp));
+        }
+    }
+    public static void printCrafts(Map<String, Integer> crafts)
+    {
+        if(!crafts.isEmpty())
+        {
+            for(String key : crafts.keySet())
+            {
+                System.out.printf("%s: %d%n", key, crafts.get(key));
+            }
+        }
+
+    }
+}
