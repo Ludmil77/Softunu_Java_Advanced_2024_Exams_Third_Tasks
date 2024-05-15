@@ -1,0 +1,81 @@
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.Scanner;
+import java.util.stream.Collectors;
+
+
+public class _01_Monster_Extermination
+{
+    public static void main(String[] args)
+    {
+        Scanner scanner = new Scanner(System.in);
+        List<Integer> monstersArmor = Arrays.stream(scanner.nextLine().split(","))
+                .map(Integer::parseInt).collect(Collectors.toList());
+        List<Integer> soldiersImpact = Arrays.stream(scanner.nextLine().split(","))
+                .map(Integer::parseInt).collect(Collectors.toList());
+        Collections.reverse(soldiersImpact);
+        int killedMonsters = 0;
+        while(true)
+        {
+            if(soldiersImpact.get(0) >= monstersArmor.get(0))
+            {
+                int difference = soldiersImpact.get(0) - monstersArmor.get(0);
+                killedMonsters++;
+                if(difference == 0)
+                {
+                    soldiersImpact.remove(0);
+                }
+                else
+                {
+                    soldiersImpact = checkTheSoldiersImpactList(soldiersImpact, monstersArmor);
+                }
+
+                monstersArmor.remove(0);
+                if(monstersArmor.isEmpty())
+                {
+                    break;
+                }
+            }
+            else
+            {
+                int difference = monstersArmor.get(0) - soldiersImpact.get(0);
+                monstersArmor.set(0, difference);
+                soldiersImpact.remove(0);
+                if(soldiersImpact.isEmpty())
+                {
+                    break;
+                }
+                if(monstersArmor.size() > 1)
+                {
+                    monstersArmor.add(monstersArmor.get(0));
+                    monstersArmor.remove(0);
+                }
+
+            }
+        }
+        if(monstersArmor.isEmpty())
+        {
+            System.out.println("All monsters have been killed!");
+        }
+        if(soldiersImpact.isEmpty())
+        {
+            System.out.println("The soldier has been defeated.");
+        }
+        System.out.printf("Total monsters killed: %d%n", killedMonsters);
+    }
+    public static List<Integer> checkTheSoldiersImpactList(List<Integer> soldiersImpact, List<Integer> monstersArmor)
+    {
+        int difference = (soldiersImpact.get(0) - monstersArmor.get(0));
+        if(soldiersImpact.size() > 1)
+        {
+            soldiersImpact.set(1, (soldiersImpact.get(1) + difference));
+            soldiersImpact.remove(0);
+        }
+        else
+        {
+            soldiersImpact.set(0, difference);
+        }
+        return soldiersImpact;
+    }
+}
