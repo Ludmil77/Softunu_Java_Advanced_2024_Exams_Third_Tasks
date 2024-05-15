@@ -1,0 +1,113 @@
+import java.util.Scanner;
+
+public class _02_Mouse_In_The_Kitchen
+{
+    public static void main(String[] args)
+    {
+        Scanner scanner = new Scanner(System.in);
+        String[] sizes = scanner.nextLine().split(",");
+        int rows = Integer.parseInt(sizes[0]);
+        int cols = Integer.parseInt(sizes[1]);
+        int rowM = -1;
+        int colM = -1;
+        int cheeseCount = 0;
+        String[][] matrix = new String[rows][cols];
+        for(int row = 0; row < rows; row++)
+        {
+            String input = scanner.nextLine();
+            String[] arr = input.split("");
+            matrix[row] = arr;
+            if(input.contains("M"))
+            {
+                rowM = row;
+                colM = input.indexOf("M");
+            }
+        }
+        cheeseCount = findCheeseCountInMatrix(matrix, rows, cols);
+
+        String command = scanner.nextLine();
+        while(!command.equals("danger"))
+        {
+            matrix[rowM][colM] = "*";
+            int previousRow = rowM;
+            int previousCol = colM;
+            if(command.equals("up"))
+            {
+                rowM--;
+            }
+            if(command.equals("down"))
+            {
+                rowM++;
+            }
+            if(command.equals("right"))
+            {
+                colM++;
+            }
+            if(command.equals("left"))
+            {
+                colM--;
+            }
+            boolean isInvalidRowCol = rowM < 0 || rowM > rows - 1 || colM < 0 || colM > cols - 1;
+            if(isInvalidRowCol)
+            {
+                System.out.println("No more cheese for tonight!");
+                rowM = previousRow;
+                colM = previousCol;
+                break;
+            }
+            if(matrix[rowM][colM].equals("C"))
+            {
+                cheeseCount--;
+                if(cheeseCount == 0)
+                {
+                    System.out.println("Happy mouse! All the cheese is eaten, good night!");
+                    break;
+                }
+            }
+            if(matrix[rowM][colM].equals("T"))
+            {
+                System.out.println("Mouse is trapped!");
+                break;
+            }
+            if(matrix[rowM][colM].equals("@"))
+            {
+
+                rowM = previousRow;
+                colM = previousCol;
+            }
+            command = scanner.nextLine();
+        }
+        if(command.equals("danger") && cheeseCount > 0)
+        {
+            System.out.println("Mouse will come back later!");
+        }
+        matrix[rowM][colM] = "M";
+        printFinalState(matrix, rows, cols);
+    }
+    public static Integer findCheeseCountInMatrix(String[][] matrix, int rows, int cols)
+    {
+        int cheeseCount = 0;
+        for(int row = 0; row < rows; row++)
+        {
+            for(int col = 0; col < cols; col++)
+            {
+                if(matrix[row][col].equals("C"))
+                {
+                    cheeseCount++;
+                }
+            }
+        }
+        return cheeseCount;
+    }
+    public static void printFinalState(String[][] matrix, int rows, int cols)
+    {
+        for(int row = 0; row < rows; row++)
+        {
+            for(int col = 0; col < cols; col++)
+            {
+                System.out.print(matrix[row][col]);
+            }
+            System.out.println();
+        }
+    }
+}
