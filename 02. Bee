@@ -1,0 +1,106 @@
+import java.util.Scanner;
+
+
+public class _02_Bee
+{
+    public static void main(String[] args)
+    {
+         Scanner scanner = new Scanner(System.in);
+         int size = Integer.parseInt(scanner.nextLine());
+         int rowB = 0;
+         int colB = 0;
+         int flowers = 0;
+         boolean isBeeOutOfMatrix = false;
+         String[][] matrix = new String[size][size];
+         for(int row = 0; row < size; row++)
+         {
+             String input = scanner.nextLine();
+             String[] arr = input.split("");
+             matrix[row] = arr;
+             if(input.contains("B"))
+             {
+                 rowB = row;
+                 colB = input.indexOf("B");
+             }
+         }
+         matrix[rowB][colB] = ".";
+         String command = scanner.nextLine();
+         while(!command.equals("End"))
+         {
+             int bonusRow = -1;
+             int bonusCol = -1;
+             if(command.equals("up"))
+             {
+                 rowB--;
+                 bonusRow = rowB - 1;
+             }
+             if(command.equals("down"))
+             {
+                 rowB++;
+                 bonusRow = rowB + 1;
+             }
+             if(command.equals("left"))
+             {
+                 colB--;
+                 bonusCol = colB - 1;
+             }
+             if(command.equals("right"))
+             {
+                 colB++;
+                 bonusCol = colB + 1;
+             }
+             boolean isInvalidRowCol = rowB < 0 || rowB > size - 1 || colB < 0 || colB > size - 1;
+             if(isInvalidRowCol)
+             {
+                 System.out.println("The bee got lost!");
+                 isBeeOutOfMatrix = true;
+                 break;
+             }
+             if(matrix[rowB][colB].equals("O"))
+             {
+                 matrix[rowB][colB] = ".";
+                 if(bonusRow > -1)
+                 {
+                     rowB = bonusRow;
+                 }
+                 else if(bonusCol > -1)
+                 {
+                     colB = bonusCol;
+                 }
+
+             }
+             if(matrix[rowB][colB].equals("f"))
+             {
+                 flowers++;
+                 matrix[rowB][colB] = ".";
+             }
+
+             command = scanner.nextLine();
+         }
+         if(!isBeeOutOfMatrix)
+         {
+             matrix[rowB][colB] = "B";
+         }
+         if(flowers < 5)
+         {
+             System.out.printf("The bee couldn't pollinate the flowers, she needed %d flowers more%n", 5 - flowers);
+         }
+         if(flowers >= 5)
+         {
+             System.out.printf("Great job, the bee manage to pollinate %d flowers!%n", flowers);
+         }
+         printFinalState(matrix, size);
+
+    }
+    public static void printFinalState(String[][] matrix, int size)
+    {
+        for(int row = 0; row < size; row++)
+        {
+            for(int col = 0; col < size; col++)
+            {
+                System.out.print(matrix[row][col]);
+            }
+            System.out.println();
+        }
+    }
+}
