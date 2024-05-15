@@ -1,0 +1,99 @@
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
+
+
+public class _02_Rally_Racing
+{
+    public static void main(String[] args)
+    {
+        Scanner scanner = new Scanner(System.in);
+        int size = Integer.parseInt(scanner.nextLine());
+        String carNumber = scanner.nextLine();
+        List<Integer> tunnel = new ArrayList<>();
+        int rowCar = 0;
+        int colCar = 0;
+        int distance = 0;
+        String[][] matrix = new String[size][size];
+        for(int row = 0; row < size; row++)
+        {
+            String input = scanner.nextLine().replace(" ", "");
+            String[] arr = input.split("");
+            matrix[row] = arr;
+            if(input.contains("T"))
+            {
+
+                tunnel.add(row);
+                tunnel.add(input.indexOf("T"));
+            }
+        }
+        String command = scanner.nextLine();
+        while(!command.equals("End"))
+        {
+            if(command.equals("up"))
+            {
+                rowCar--;
+            }
+            if(command.equals("down"))
+            {
+                rowCar++;
+            }
+            if(command.equals("left"))
+            {
+                colCar--;
+            }
+            if(command.equals("right"))
+            {
+                colCar++;
+            }
+            if(matrix[rowCar][colCar].equals("."))
+            {
+                distance += 10;
+            }
+            if(matrix[rowCar][colCar].equals("T"))
+            {
+                distance += 30;
+                matrix[rowCar][colCar] = ".";
+                if(rowCar == tunnel.get(0) && colCar == tunnel.get(1))
+                {
+                    rowCar = tunnel.get(2);
+                    colCar = tunnel.get(3);
+
+                }
+                else
+                {
+                    rowCar = tunnel.get(0);
+                    colCar = tunnel.get(1);
+                    matrix[rowCar][colCar] = ".";
+                }
+                matrix[rowCar][colCar] = ".";
+            }
+            if(matrix[rowCar][colCar].equals("F"))
+            {
+                distance += 10;
+                matrix[rowCar][colCar] = "C";
+                System.out.printf("Racing car %s finished the stage!%n", carNumber);
+                break;
+            }
+            command = scanner.nextLine();
+        }
+        matrix[rowCar][colCar] = "C";
+        if(command.equals("End"))
+        {
+            System.out.printf("Racing car %s DNF.%n", carNumber);
+        }
+        System.out.printf("Distance covered %d km.%n", distance);
+        printFinalState(matrix, size);
+    }
+    public static void printFinalState(String[][] matrix, int size)
+    {
+        for(int row = 0; row < size; row++)
+        {
+            for(int col = 0; col < size; col++)
+            {
+                System.out.print(matrix[row][col]);
+            }
+            System.out.println();
+        }
+    }
+}
