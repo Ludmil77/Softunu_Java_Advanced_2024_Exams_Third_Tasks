@@ -1,0 +1,123 @@
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
+
+public class _02_Armory
+{
+    public static void main(String[] args)
+    {
+        Scanner scanner = new Scanner(System.in);
+        int size = Integer.parseInt(scanner.nextLine());
+        int rowA = 0;
+        int colA = 0;
+        int coins = 0;
+        List<Integer> mirrors = new ArrayList<>();
+        String[][] matrix = new String[size][size];
+        for(int row = 0; row < size; row++)
+        {
+            String input = scanner.nextLine();
+            String[] arr = input.split("");
+            matrix[row] = arr;
+            if(input.contains("A"))
+            {
+                rowA = row;
+                colA = input.indexOf("A");
+            }
+        }
+        mirrors = findMirrorsCoordinates(matrix, size);
+        matrix[rowA][colA] = "-";
+        while(true)
+        {
+            String command = scanner.nextLine();
+            if(command.equals("up"))
+            {
+                rowA--;
+            }
+            if(command.equals("down"))
+            {
+                rowA++;
+            }
+            if(command.equals("left"))
+            {
+                colA--;
+            }
+            if(command.equals("right"))
+            {
+                colA++;
+            }
+            if(rowA < 0 || rowA > size - 1 || colA < 0 || colA > size - 1)
+            {
+                System.out.println("I do not need more swords!");
+                System.out.printf("The king paid %d gold coins.%n", coins);
+                printMatrixOutOfShape(matrix, size);
+                return;
+            }
+            if(matrix[rowA][colA].equals("M"))
+            {
+                matrix[rowA][colA] = "-";
+                if(rowA == mirrors.get(0) && colA == mirrors.get(1))
+                {
+                    rowA = mirrors.get(2);
+                    colA = mirrors.get(3);
+                }
+                else
+                {
+                    rowA = mirrors.get(0);
+                    colA = mirrors.get(1);
+                }
+                matrix[rowA][colA] = "-";
+            }
+            if(Character.isDigit(matrix[rowA][colA].charAt(0)))
+            {
+                coins += Integer.parseInt(matrix[rowA][colA]);
+                if(coins >= 65)
+                {
+                    matrix[rowA][colA] = "A";
+                    System.out.println("Very nice swords, I will come back for more!");
+                    System.out.printf("The king paid %d gold coins.%n", coins);
+                    printFinalMatrix(matrix, size);
+                    return;
+                }
+                matrix[rowA][colA] = "-";
+            }
+        }
+    }
+    public static  List<Integer> findMirrorsCoordinates(String[][] matrix, int size)
+    {
+        List<Integer> mirrors = new ArrayList<>();
+        for(int row = 0; row < size; row++)
+        {
+            for(int col = 0; col < size; col++)
+            {
+                if(matrix[row][col].equals("M"))
+                {
+                    mirrors.add(row);
+                    mirrors.add(col);
+                }
+            }
+        }
+        return mirrors;
+    }
+    public static void printMatrixOutOfShape(String[][] matrix, int size)
+    {
+        for(int row = 0; row < size; row++)
+        {
+            for(int col = 0; col < size; col++)
+            {
+                System.out.print("-");
+            }
+            System.out.println();
+        }
+    }
+    public static void printFinalMatrix(String[][] matrix, int size)
+    {
+        for(int row = 0; row < size; row++)
+        {
+            for(int col = 0; col < size; col++)
+            {
+                System.out.print(matrix[row][col]);
+            }
+            System.out.println();
+        }
+    }
+}
