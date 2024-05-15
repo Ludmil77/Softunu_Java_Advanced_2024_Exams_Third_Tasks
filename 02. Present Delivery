@@ -1,0 +1,158 @@
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
+
+public class _02_Present_Delivery
+{
+    public static void main(String[] args)
+    {
+        Scanner scanner = new Scanner(System.in);
+        int presents = Integer.parseInt(scanner.nextLine());
+        int size = Integer.parseInt(scanner.nextLine());
+        int countNiceKidsV = 0;
+        int rowS = 0;
+        int colS = 0;
+        int givenPresents = 0;
+        String[][] matrix = new String[size][size];
+        for(int row = 0; row < size; row++)
+        {
+            String input = scanner.nextLine().replace(" ", "");
+            String[] arr = input.split("");
+            matrix[row] = arr;
+            if(input.contains("S"))
+            {
+                rowS = row;
+                colS = input.indexOf("S");
+            }
+        }
+        countNiceKidsV = findCountOfNiceKids(matrix, size);
+        List<Integer> presentsNiceKids = new ArrayList<>();
+        presentsNiceKids.add(presents);
+        presentsNiceKids.add(countNiceKidsV);
+        matrix[rowS][colS] = "-";
+        String command = scanner.nextLine();
+        while(!command.equals("Christmas morning"))
+        {
+            int previousRow = rowS;
+            int previousCol = colS;
+            if (command.equals("up"))
+            {
+                rowS--;
+            }
+            if (command.equals("down"))
+            {
+                rowS++;
+            }
+            if (command.equals("left"))
+            {
+                colS--;
+            }
+            if (command.equals("right"))
+            {
+                colS++;
+            }
+            //boolean isInvalidRowCol = rowS < 0 || rowS > size - 1 || colS < 0 || colS > size - 1;
+            if(matrix[rowS][colS].equals("V"))
+            {
+                givenPresents++;
+                countNiceKidsV--;
+                if(givenPresents == presents)
+                {
+                    System.out.println("Santa ran out of presents!");
+                    break;
+                }
+            }
+            if(matrix[rowS][colS].equals("C"))
+            {
+                givenPresents = findCookiesChildren(matrix, presents, givenPresents, rowS, colS);
+                matrix[rowS][colS - 1] = "-";
+                matrix[rowS][colS + 1] = "-";
+                matrix[rowS - 1][colS] = "-";
+                matrix[rowS + 1][colS] = "-";
+                if(givenPresents == presents)
+                {
+                    System.out.println("Santa ran out of presents!");
+
+                    break;
+                }
+            }
+            matrix[rowS][colS] = "-";
+            command = scanner.nextLine();
+        }
+        matrix[rowS][colS] = "S";
+        printFinalState(matrix, size);
+        int countNiceKidsLeft = findCountOfNiceKids(matrix, size);
+        if(countNiceKidsLeft == 0)
+        {
+            System.out.printf("Good job, Santa! %d happy nice kid/s.%n", givenPresents);
+        }
+        if(countNiceKidsLeft > 0)
+        {
+            System.out.printf("No presents for %d nice kid/s.%n", countNiceKidsLeft);
+        }
+    }
+    public static Integer findCountOfNiceKids(String[][] matrix, int size)
+    {
+        int countNiceKidsV = 0;
+        for(int row = 0; row < size; row++)
+        {
+            for(int col = 0; col < size; col++)
+            {
+                if(matrix[row][col].equals("V"))
+                {
+                    countNiceKidsV++;
+
+                }
+            }
+        }
+        return countNiceKidsV;
+    }
+    public static Integer findCookiesChildren(String[][] matrix, int presents, int givenPresents, int rowS, int colS)
+    {
+        if(givenPresents < presents && (matrix[rowS][colS - 1].equals("V") || matrix[rowS][colS - 1].equals("X")))
+        {
+            givenPresents++;
+        }
+        if(givenPresents < presents && (matrix[rowS][colS + 1].equals("V") || matrix[rowS][colS + 1].equals("X")))
+        {
+            givenPresents++;
+        }
+        if(givenPresents < presents && (matrix[rowS - 1][colS].equals("V") || matrix[rowS - 1][colS].equals("X")))
+        {
+            givenPresents++;
+        }
+        if(givenPresents < presents && (matrix[rowS + 1][colS].equals("V") || matrix[rowS + 1][colS].equals("X")))
+        {
+            givenPresents++;
+        }
+        return givenPresents;
+    }
+    public static Integer findCountOfNiceKidsV(String[][] matrix, int size)
+    {
+        int countLeftNiceKids = 0;
+        for(int row = 0; row < size; row++)
+        {
+            for(int col = 0; col < size; col++)
+            {
+                if(matrix[row][col].equals("V"))
+                {
+                    countLeftNiceKids++;
+                }
+            }
+
+        }
+        return countLeftNiceKids;
+    }
+    public static void printFinalState(String[][] matrix, int size)
+    {
+        for(int row = 0; row < size; row++)
+        {
+            for(int col = 0; col < size; col++)
+            {
+                System.out.print(matrix[row][col] + " ");
+            }
+            System.out.println();
+        }
+    }
+
+}
