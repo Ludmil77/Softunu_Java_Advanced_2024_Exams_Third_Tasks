@@ -1,0 +1,68 @@
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.Scanner;
+import java.util.stream.Collectors;
+
+
+
+public class Main
+{
+    public static void main(String[] args)
+    {
+        Scanner scanner = new Scanner(System.in);
+        List<Integer> money = Arrays.stream(scanner.nextLine().split(" "))
+                .map(Integer::parseInt).collect(Collectors.toList());
+        List<Integer> prices = Arrays.stream(scanner.nextLine().split(" "))
+                .map(Integer::parseInt).collect(Collectors.toList());
+        Collections.reverse(money);
+        int food = 0;
+        while(true)
+        {
+            if(money.size() == 0 || prices.size() == 0)
+            {
+                break;
+            }
+            if(money.get(0) == prices.get(0))
+            {
+                food++;
+                money.remove(0);
+                prices.remove(0);
+                continue;
+            }
+            else if(money.get(0) > prices.get(0))
+            {
+                 food++;
+                 if(money.size() > 1)
+                 {
+                     money.set(1, money.get(1) + money.get(0) - prices.get(0));
+                 }
+
+                 money.remove(0);
+                 prices.remove(0);
+                 continue;
+            }
+            else if(money.get(0) < prices.get(0))
+            {
+                money.remove(0);
+                prices.remove(0);
+            }
+        }
+        if(food >= 4)
+        {
+            System.out.printf("Gluttony of the day! Henry ate %d foods.%n", food);
+        }
+        if(food > 1 && food < 4)
+        {
+            System.out.printf("Henry ate: %s foods.%n", food);
+        }
+        if(food == 1)
+        {
+            System.out.printf("Henry ate: %d food.%n", food);
+        }
+        if(food == 0)
+        {
+            System.out.println("Henry remained hungry. He will try next weekend again.");
+        }
+    }
+}
