@@ -1,0 +1,127 @@
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
+
+public class _02_Cooking_journey
+{
+    public static void main(String[] args)
+    {
+        Scanner scanner = new Scanner(System.in);
+        int size = Integer.parseInt(scanner.nextLine());
+        int rowS = 0;
+        int colS = 0;
+        int sum = 0;
+        List<Integer> pillars = new ArrayList<>();
+        String[][] matrix = new String[size][size];
+        for(int row = 0; row < size; row++)
+        {
+            String input = scanner.nextLine();
+            String[] arr = input.split("");
+            matrix[row]  = arr;
+            if(input.contains("S"))
+            {
+                rowS = row;
+                colS = input.indexOf("S");
+            }
+        }
+        matrix[rowS][colS] = "-";
+        pillars = findPillars(matrix, size);
+        while(true)
+        {
+            String command = scanner.nextLine();
+
+            if(command.equals("up"))
+            {
+                rowS--;
+            }
+            if(command.equals("down"))
+            {
+                rowS++;
+            }
+            if(command.equals("left"))
+            {
+                colS--;
+            }
+            if(command.equals("right"))
+            {
+                colS++;
+            }
+            boolean isInvalidRowCol = rowS < 0 || rowS > size - 1 || colS < 0 || colS > size - 1;
+            if(isInvalidRowCol)
+            {
+                System.out.println("Bad news! You are out of the pastry shop.");
+                System.out.printf("Money: %d%n", sum);
+                printBadNewsMatrix(matrix, size);
+                return;
+            }
+            if(Character.isDigit((matrix[rowS][colS].charAt(0))))
+            {
+                sum += Integer.parseInt(matrix[rowS][colS]);
+                if(sum >= 50)
+                {
+                    matrix[rowS][colS] = "S";
+                    break;
+                }
+                matrix[rowS][colS] = "-";
+            }
+            if(matrix[rowS][colS].equals("P"))
+            {
+                matrix[rowS][colS] = "-";
+                if(rowS == pillars.get(0) && colS == pillars.get(1))
+                {
+                    rowS = pillars.get(2);
+                    colS = pillars.get(3);
+                }
+                else if(rowS == pillars.get(2) && colS == pillars.get(3))
+                {
+                    rowS = pillars.get(0);
+                    colS = pillars.get(1);
+                }
+                matrix[rowS][colS] = "-";
+            }
+        }
+        System.out.println("Good news! You succeeded in collecting enough money!");
+        System.out.printf("Money: %d%n", sum);
+        printFinalState(matrix, size);
+
+    }
+    public static List<Integer> findPillars(String[][] matrix, int size)
+    {
+        List<Integer> pillars = new ArrayList<>();
+        for(int row = 0; row < size; row++)
+        {
+            for(int col = 0; col < size; col++)
+            {
+                if(matrix[row][col].equals("P"))
+                {
+                    pillars.add(row);
+                    pillars.add(col);
+                }
+            }
+        }
+        return pillars;
+    }
+    public static void printBadNewsMatrix(String[][] matrix, int size)
+    {
+        for(int row = 0; row < size; row++)
+        {
+            for(int col = 0; col < size; col++)
+            {
+                System.out.print("-");
+            }
+            System.out.println();
+        }
+
+    }
+    public static void printFinalState(String[][] matrix, int size)
+    {
+        for(int row = 0; row < size; row++)
+        {
+            for(int col = 0; col < size; col++)
+            {
+                System.out.print(matrix[row][col]);
+            }
+            System.out.println();
+        }
+    }
+}
