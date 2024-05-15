@@ -1,0 +1,108 @@
+import java.util.*;
+import java.util.stream.Collectors;
+
+public class _01_Pastry_shop
+{
+    public static void main(String[] args)
+    {
+        Scanner scanner = new Scanner(System.in);
+        Map<String, Integer> materials = new LinkedHashMap<>();
+        materials.put("Biscuit", 0);  materials.put("Cake", 0); materials.put("Pie", 0); materials.put("Pastry", 0);
+        List<Integer> liquids = Arrays.stream(scanner.nextLine().split(" "))
+                .map(Integer::parseInt).collect(Collectors.toList());
+        List<Integer> ingredients = Arrays.stream(scanner.nextLine().split(" "))
+                .map(Integer::parseInt).collect(Collectors.toList());
+        Collections.reverse(ingredients);
+        while(!liquids.isEmpty() && !ingredients.isEmpty())
+        {
+            int result = liquids.get(0) + ingredients.get(0);
+            if(result == 25)
+            {
+                materials.put("Biscuit", materials.get("Biscuit") + 1);
+            }
+            else if(result == 50)
+            {
+                materials.put("Cake", materials.get("Cake") + 1);
+            }
+            else if(result == 75)
+            {
+                materials.put("Pastry", materials.get("Pastry") + 1);
+            }
+            else if(result == 100)
+            {
+                materials.put("Pie", materials.get("Pie") + 1);
+            }
+            else
+            {
+                liquids.remove(0);
+                ingredients.set(0, ingredients.get(0) + 3);
+                continue;
+            }
+            liquids.remove(0);
+            ingredients.remove(0);
+        }
+        if(checkTheCountOfMaterials(materials))
+        {
+            System.out.println("Great! You succeeded in cooking all the food!");
+        }
+        if(!checkTheCountOfMaterials(materials))
+        {
+            System.out.println("What a pity! You didn't have enough materials to cook everything.");
+        }
+        printLiquids(liquids);
+        printIngredients(ingredients);
+        printMaterials(materials);
+
+    }
+    public static boolean checkTheCountOfMaterials(Map<String, Integer> materials)
+    {
+
+        for(String key : materials.keySet())
+        {
+            if(materials.get(key) == 0)
+            {
+                return false;
+            }
+        }
+       return true;
+    }
+    public static void printLiquids( List<Integer> liquids)
+    {
+        if(liquids.isEmpty())
+        {
+            System.out.println("Liquids left: none");
+        }
+        else
+        {
+            List<String> list = new ArrayList<>();
+            for(Integer liquid : liquids)
+            {
+                list.add(String.valueOf(liquid));
+            }
+            System.out.println("Liquids left: " + String.join(", ", list));
+        }
+    }
+    public static void printIngredients( List<Integer> ingredients)
+    {
+        if(ingredients.isEmpty())
+        {
+            System.out.println("Ingredients left: none");
+        }
+        else
+        {
+            List<String> list = new ArrayList<>();
+            for(Integer ingredient : ingredients)
+            {
+                list.add(String.valueOf(ingredient));
+            }
+            System.out.println("Ingredients left: " + String.join(", ", list));
+        }
+    }
+    public static void printMaterials(Map<String, Integer> materials )
+    {
+        for(String key : materials.keySet())
+        {
+            System.out.printf("%s: %d%n", key, materials.get(key));
+        }
+    }
+}
