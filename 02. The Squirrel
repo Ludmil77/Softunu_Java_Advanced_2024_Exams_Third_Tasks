@@ -1,0 +1,77 @@
+import java.util.Scanner;
+
+public class _02_The_Squirrel
+{
+    public static void main(String[] args)
+    {
+        Scanner scanner = new Scanner(System.in);
+        int rowS = 0;
+        int colS = 0;
+        int hazelnuts = 0;
+        int size = Integer.parseInt(scanner.nextLine());
+        String[] commands = scanner.nextLine().split(", ");
+        String[][] matrix = new String[size][size];
+        for(int row = 0; row < size; row++)
+        {
+            String input = scanner.nextLine();
+            String[] arr = input.split("");
+            matrix[row] = arr;
+            if(input.contains("s"))
+            {
+                rowS = row;
+                colS = input.indexOf("s");
+            }
+        }
+        for(int i = 0; i < commands.length; i++)
+        {
+            //left", "right", "down", and "up
+            String command = commands[i];
+            if(command.equals("up"))
+            {
+                rowS--;
+            }
+            if(command.equals("down"))
+            {
+                rowS++;
+            }
+            if(command.equals("left"))
+            {
+                colS--;
+            }
+            if(command.equals("right"))
+            {
+                colS++;
+            }
+            if(rowS < 0 || rowS > size - 1 || colS < 0 || colS > size - 1)
+            {
+                System.out.println("The squirrel is out of the field.");
+                printHazelnutsCount(hazelnuts);
+                return;
+            }
+            if(matrix[rowS][colS].equals("t"))
+            {
+                System.out.println("Unfortunately, the squirrel stepped on a trap...");
+                printHazelnutsCount(hazelnuts);
+                return;
+            }
+            if(matrix[rowS][colS].equals("h"))
+            {
+                hazelnuts++;
+                matrix[rowS][colS] = "*";
+                if(hazelnuts == 3)
+                {
+                    System.out.println("Good job! You have collected all hazelnuts!");
+                    System.out.println("Hazelnuts collected: 3");
+                    return;
+                }
+            }
+        }
+        System.out.println("There are more hazelnuts to collect.");
+        printHazelnutsCount(hazelnuts);
+
+    }
+    public static void printHazelnutsCount(int hazelnuts)
+    {
+        System.out.printf("Hazelnuts collected: %d%n", hazelnuts);
+    }
+}
