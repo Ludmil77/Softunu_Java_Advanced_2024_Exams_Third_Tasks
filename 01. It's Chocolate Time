@@ -1,0 +1,71 @@
+import java.util.*;
+import java.util.stream.Collectors;
+
+
+public class _01_It_s_Chocolate_Time
+{
+    public static void main(String[] args)
+    {
+        Scanner scanner = new Scanner(System.in);
+        List<Double> milk = Arrays.stream(scanner.nextLine().split(" "))
+                .map(Double::parseDouble).collect(Collectors.toList());
+        List<Double> cacao = Arrays.stream(scanner.nextLine().split(" "))
+                .map(Double::parseDouble).collect(Collectors.toList());
+        Map<String, Integer> items = new TreeMap<>();
+        Collections.reverse(cacao);
+        while(!milk.isEmpty() && !cacao.isEmpty())
+        {
+            double result = (cacao.get(0) * 100.0) / (cacao.get(0) + milk.get(0));
+            if(result == 30)
+            {
+                if(!items.containsKey("Milk Chocolate"))
+                {
+                    items.put("Milk Chocolate", 0);
+                }
+                items.put("Milk Chocolate", items.get("Milk Chocolate") + 1);
+            }
+            else if(result == 50)
+            {
+                if(!items.containsKey("Dark Chocolate"))
+                {
+                    items.put("Dark Chocolate", 0);
+                }
+                items.put("Dark Chocolate", items.get("Dark Chocolate") + 1);
+            }
+            else if(result == 100)
+            {
+                if(!items.containsKey("Baking Chocolate"))
+                {
+                    items.put("Baking Chocolate", 0);
+                }
+                items.put("Baking Chocolate", items.get("Baking Chocolate") + 1);
+            }
+            else
+            {
+                cacao.remove(0);
+                milk.set(0, milk.get(0) + 10);
+                milk.add(milk.get(0));
+                milk.remove(0);
+                continue;
+            }
+            milk.remove(0);
+            cacao.remove(0);
+        }
+       printFinalState(items);
+    }
+    public static void printFinalState(Map<String, Integer> items)
+    {
+        if(items.size() == 3)
+        {
+            System.out.println("It’s a Chocolate Time. All chocolate types are prepared.");
+        }
+        else
+        {
+            System.out.println("Sorry, but you didn't succeed to prepare all types of chocolates.");
+        }
+        for(String key : items.keySet())
+        {
+            System.out.printf("# %s --> %d%n", key, items.get(key));
+        }
+    }
+}
