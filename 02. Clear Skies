@@ -1,0 +1,102 @@
+import java.util.Scanner;
+
+public class Main
+{
+    public static void main(String[] args)
+    {
+        Scanner scanner = new Scanner(System.in);
+        int size = Integer.parseInt(scanner.nextLine());
+        int startRow = 0;
+        int startCol = 0;
+        int armour = 300;
+        int fail = 0;
+        String[][] matrix = new String[size][size];
+        for(int row = 0; row < size; row++)
+        {
+            String[] arr = scanner.nextLine().split("");
+            matrix[row] = arr;
+        }
+        int[] rowCol = findStartRowAndCol(matrix, size);
+        startRow = rowCol[0];
+        startCol = rowCol[1];
+        matrix[startRow][startCol] = "-";
+        String command = scanner.nextLine();
+        while(!command.isEmpty())
+        {
+            //up", "down", "left" and "right"
+
+            if(command.equals("up") && startRow > 0)
+            {
+                 startRow--;
+            }
+            if(command.equals("down") && startRow < size - 1)
+            {
+                startRow++;
+            }
+            if(command.equals("left") && startCol > 0)
+            {
+                startCol--;
+            }
+            if(command.equals("right") && startCol < size - 1)
+            {
+                startCol++;
+            }
+            if(matrix[startRow][startCol].equals("R"))
+            {
+                armour = 300;
+
+                matrix[startRow][startCol] = "-";
+                command = scanner.nextLine();
+                continue;
+            }
+            if(matrix[startRow][startCol].equals("E"))
+            {
+                armour -= 100;
+                fail++;
+                if(fail == 3 && armour <= 0)
+                {
+                    System.out.print("Mission failed, your jetfighter was shot down! ");
+                    System.out.printf("Last coordinates [%d, %d]!%n", startRow, startCol);
+                    break;
+                }
+                if(fail == 4)
+                {
+                    System.out.println("Mission accomplished, you neutralized the aerial threat!");
+                    break;
+                }
+                matrix[startRow][startCol] = "-";
+
+            }
+           command = scanner.nextLine();
+        }
+        matrix[startRow][startCol] = "J";
+        printFinalMatrix(matrix, size);
+    }
+    public static int[] findStartRowAndCol(String[][] matrix, int size)
+    {
+        int[] rowCol = new int[2];
+        for(int row = 0; row < size; row++)
+        {
+            for(int col = 0; col < size; col++)
+            {
+                if(matrix[row][col].equals("J"))
+                {
+                    rowCol[0] = row;
+                    rowCol[1] = col;
+                }
+            }
+        }
+        return rowCol;
+    }
+   public static void printFinalMatrix(String[][] matrix, int size)
+   {
+       for(int row = 0; row < size; row++)
+       {
+           for(int col = 0; col < size; col++)
+           {
+               System.out.print(matrix[row][col]);
+           }
+           System.out.println();
+       }
+   }
+}
