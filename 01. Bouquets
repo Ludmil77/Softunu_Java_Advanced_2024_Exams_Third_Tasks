@@ -1,0 +1,58 @@
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.Scanner;
+import java.util.stream.Collectors;
+
+public class _01_Bouquets
+{
+    public static void main(String[] args)
+    {
+        Scanner scanner = new Scanner(System.in);
+        List<Integer> tulips = Arrays.stream(scanner.nextLine().split(", "))
+                .map(Integer::parseInt).collect(Collectors.toList());
+        List<Integer> daffodils = Arrays.stream(scanner.nextLine().split(", "))
+                .map(Integer::parseInt).collect(Collectors.toList());
+        Collections.reverse(tulips);
+        int storedSum = 0;
+        int bouquets = 0;
+        while(!tulips.isEmpty() && !daffodils.isEmpty())
+        {
+            int sum = tulips.get(0) + daffodils.get(0);
+            if(sum == 15)
+            {
+                bouquets++;
+                tulips.remove(0);
+                daffodils.remove(0);
+            }
+            else if(sum > 15)
+            {
+                tulips.set(0, tulips.get(0) - 2);
+            }
+            else
+            {
+                storedSum += sum;
+                tulips.remove(0);
+                daffodils.remove(0);
+            }
+        }
+        int extraBouquets = 0;
+        if(storedSum >= 15)
+        {
+            extraBouquets = storedSum / 15;
+        }
+        printFinalState(extraBouquets, bouquets);
+    }
+    public static void printFinalState(int extraBouquets, int bouquets)
+    {
+        int currentBouquets = extraBouquets + bouquets;
+        if(currentBouquets >= 5)
+        {
+            System.out.printf("You made it! You go to the competition with %d bouquets!%n", currentBouquets);
+        }
+        else
+        {
+            System.out.printf("You failed... You need more %d bouquets.%n", 5 - currentBouquets);
+        }
+    }
+}
