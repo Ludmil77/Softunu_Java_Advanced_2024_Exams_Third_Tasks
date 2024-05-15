@@ -1,0 +1,123 @@
+import java.util.*;
+import java.util.stream.Collectors;
+
+
+public class _01_Apocalypse_Preparation
+{
+    public static void main(String[] args)
+    {
+        Scanner scanner = new Scanner(System.in);
+        List<Integer> textiles = Arrays.stream(scanner.nextLine().split(" "))
+                .map(Integer::parseInt).collect(Collectors.toList());
+        List<Integer> medicaments = Arrays.stream(scanner.nextLine().split(" "))
+                .map(Integer::parseInt).collect(Collectors.toList());
+        Collections.reverse(medicaments);
+        Map<String, Integer> items = new TreeMap<>();
+        while(!textiles.isEmpty() && !medicaments.isEmpty())
+        {
+            int sum = textiles.get(0) + medicaments.get(0);
+            boolean b1 = sum == 30 || sum == 40 || sum >= 100 ;
+            if(b1)
+            {
+                textiles.remove(0);
+                medicaments.remove(0);
+            }
+            if(sum == 30)
+            {
+                if(!items.containsKey("Patch"))
+                {
+                    items.put("Patch", 0);
+                }
+                items.put("Patch", items.get("Patch") + 1);
+            }
+            if(sum == 40)
+            {
+                if(!items.containsKey("Bandage"))
+                {
+                    items.put("Bandage", 0);
+                }
+                items.put("Bandage", items.get("Bandage") + 1);
+            }
+            if(sum == 100)
+            {
+                if(!items.containsKey("MedKit"))
+                {
+                    items.put("MedKit", 0);
+                }
+                items.put("MedKit", items.get("MedKit") + 1);
+            }
+            if(sum > 100)
+            {
+                int residue = sum - 100;
+                if(!items.containsKey("MedKit"))
+                {
+                    items.put("MedKit", 0);
+                }
+                items.put("MedKit", items.get("MedKit") + 1);
+                medicaments.set(0, medicaments.get(0) + residue);
+            }
+            if(sum < 30 || (sum > 30 && sum < 40) || (sum > 40 && sum < 100))
+            {
+                textiles.remove(0);
+                medicaments.set(0, medicaments.get(0) + 10);
+            }
+        }
+        if(textiles.isEmpty() && !medicaments.isEmpty())
+        {
+            System.out.println("Textiles are empty.");
+        }
+        if(!textiles.isEmpty() && medicaments.isEmpty())
+        {
+            System.out.println("Medicaments are empty.");
+        }
+        if(textiles.isEmpty() && medicaments.isEmpty())
+        {
+            System.out.println("Textiles and medicaments are both empty.");
+        }
+        Map<String, Integer> orderedItems = items.entrySet()
+                .stream()
+                .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
+                .collect(LinkedHashMap::new, (map, entry) -> map.put(entry.getKey(), entry.getValue()), Map::putAll);
+        for(String key : orderedItems.keySet())
+        {
+            System.out.printf("%s - %d%n", key, orderedItems.get(key));
+        }
+
+        if(!medicaments.isEmpty())
+        {
+            System.out.print("Medicaments left: ");
+            int counter = 0;
+            for(Integer medicament : medicaments)
+            {
+                if(counter < medicaments.size() - 1)
+                {
+                    System.out.print(medicament + ", ");
+                }
+                else
+                {
+                    System.out.print(medicament);
+                }
+                counter++;
+            }
+            System.out.println();
+        }
+        if(!textiles.isEmpty())
+        {
+            System.out.print("Textiles left: ");
+            int counter = 0;
+            for(Integer textile : textiles)
+            {
+                if(counter < textiles.size() - 1)
+                {
+                    System.out.print(textile + ", ");
+                }
+                else
+                {
+                    System.out.print(textile);
+                }
+                counter++;
+            }
+            System.out.println();
+        }
+    }
+}
