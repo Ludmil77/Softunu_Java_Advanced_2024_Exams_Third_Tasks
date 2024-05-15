@@ -1,0 +1,102 @@
+import java.util.Scanner;
+
+public class _02_Mouse_and_Cheese
+{
+    public static void main(String[] args)
+    {
+        Scanner scanner = new Scanner(System.in);
+        int size = Integer.parseInt(scanner.nextLine());
+        int rowM = 0;
+        int colM = 0;
+        int cheeseCount = 0;
+        String[][] matrix = new String[size][size];
+        for(int row = 0; row < size; row++)
+        {
+            String input = scanner.nextLine();
+            String[] arr = input.split("");
+            matrix[row] = arr;
+            if(input.contains("M"))
+            {
+                rowM = row;
+                colM = input.indexOf("M");
+            }
+        }
+        String command = scanner.nextLine();
+        while(!command.equals("end"))
+        {
+            matrix[rowM][colM] = "-";
+            int bonusRow = -1;
+            int bonusCol = -1;
+            if(command.equals("up"))
+            {
+                rowM--;
+                bonusRow = rowM - 1;
+            }
+            if(command.equals("down"))
+            {
+                rowM++;
+                bonusRow = rowM + 1;
+            }
+            if(command.equals("left"))
+            {
+                colM--;
+                bonusCol = colM - 1;
+            }
+            if(command.equals("right"))
+            {
+                colM++;
+                bonusCol = colM + 1;
+            }
+            if(rowM < 0 || rowM > size - 1 || colM < 0 || colM > size - 1)
+            {
+                System.out.println("Where is the mouse?");
+                break;
+            }
+            if(matrix[rowM][colM].equals("B"))
+            {
+                matrix[rowM][colM] = "-";
+                if(bonusRow > -1)
+                {
+                    rowM = bonusRow;
+                }
+                else if(bonusCol > -1)
+                {
+                    colM = bonusCol;
+                }
+            }
+            if(matrix[rowM][colM].equals("c"))
+            {
+                cheeseCount++;
+                matrix[rowM][colM] = "-";
+            }
+           
+
+            command = scanner.nextLine();
+        }
+        if(command.equals("end"))
+        {
+            matrix[rowM][colM] = "M";
+        }
+       printFinalState(matrix, size, cheeseCount);
+    }
+
+    public static void printFinalState(String[][] matrix, int size, int  cheeseCount)
+    {
+        if(cheeseCount < 5)
+        {
+            System.out.printf("The mouse couldn't eat the cheeses, she needed %d cheeses more.%n", 5 - cheeseCount);
+        }
+        if(cheeseCount >= 5)
+        {
+            System.out.printf("Great job, the mouse is fed %d cheeses!%n", cheeseCount);
+        }
+        for(int row = 0; row < size; row++)
+        {
+            for(int col = 0 ;col < size; col++)
+            {
+                System.out.print(matrix[row][col]);
+            }
+            System.out.println();
+        }
+    }
+}
