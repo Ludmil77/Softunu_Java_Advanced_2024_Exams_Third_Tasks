@@ -1,0 +1,90 @@
+import java.util.*;
+import java.util.stream.Collectors;
+
+
+public class _01_Meeting
+{
+    public static void main(String[] args)
+    {
+         Scanner scanner = new Scanner(System.in);
+        List<Integer> males = Arrays.stream(scanner.nextLine().split(" "))
+                .map(Integer::parseInt).collect(Collectors.toList());
+        List<Integer> females = Arrays.stream(scanner.nextLine().split(" "))
+                .map(Integer::parseInt).collect(Collectors.toList());
+        List<String> malesString = new ArrayList<>();
+        List<String> femalesString = new ArrayList<>();
+        Collections.reverse(males);
+        males = filterMalesAndFemales(males);
+        females = filterMalesAndFemales(females);
+        int matches = 0;
+        while(!males.isEmpty() && !females.isEmpty())
+        {
+            if(males.get(0) == females.get(0))
+            {
+                males.remove(0);
+                females.remove(0);
+                matches++;
+            }
+            else
+            {
+                females.remove(0);
+                males.set(0, males.get(0) - 2);
+                males = filterMalesAndFemales(males);
+            }
+        }
+        System.out.printf("Matches: %d%n", matches);
+        males = filterMalesAndFemales(males);
+        females = filterMalesAndFemales(females);
+        malesString = transformListsToString(males);
+        femalesString = transformListsToString(females);
+        printFinalState(malesString, femalesString);
+
+    }
+    public static List<Integer> filterMalesAndFemales(List<Integer> malesOrFemales)
+    {
+        List<Integer> temp = new ArrayList<>();
+        for(int i = 0; i < malesOrFemales.size(); i++)
+        {
+
+            if(malesOrFemales.get(i) <= 0)
+            {
+                continue;
+            }
+            if(malesOrFemales.get(i) % 25 == 0)
+            {
+                i++;
+                continue;
+            }
+            temp.add(malesOrFemales.get(i));
+        }
+        return temp;
+    }
+    public static List<String> transformListsToString(List<Integer> malesOrFemales)
+    {
+        List<String> temp = new ArrayList<>();
+        for(Integer num : malesOrFemales)
+        {
+            temp.add(String.valueOf(num));
+        }
+        return temp;
+    }
+    public static void printFinalState(List<String>  malesString, List<String>  femalesString)
+    {
+        if(malesString.isEmpty())
+        {
+            System.out.println("Males left: none");
+        }
+        if(!malesString.isEmpty())
+        {
+            System.out.println("Males left: " + String.join(", ", malesString));
+        }
+        if(femalesString.isEmpty())
+        {
+            System.out.println("Females left: none");
+        }
+        if(!femalesString.isEmpty())
+        {
+            System.out.println("Females left: " + String.join(", ", femalesString));
+        }
+    }
+}
