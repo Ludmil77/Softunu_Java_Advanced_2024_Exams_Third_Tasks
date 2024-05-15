@@ -1,0 +1,49 @@
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.Scanner;
+import java.util.stream.Collectors;
+
+public class _01_Flower_Wreaths
+{
+    public static void main(String[] args)
+    {
+        Scanner scanner = new Scanner(System.in);
+        int  wreaths = 0;
+        int storedWreaths = 0;
+        List<Integer> lilies = Arrays.stream(scanner.nextLine().split(", "))
+                .map(Integer::parseInt).collect(Collectors.toList());
+        List<Integer> roses = Arrays.stream(scanner.nextLine().split(", "))
+                .map(Integer::parseInt).collect(Collectors.toList());
+        Collections.reverse(lilies);
+        while(!lilies.isEmpty() && !roses.isEmpty())
+        {
+            int sum = lilies.get(0) + roses.get(0);
+            if(sum == 15)
+            {
+                wreaths++;
+                lilies.remove(0);
+                roses.remove(0);
+            }
+            else if(sum > 15)
+            {
+                lilies.set(0, lilies.get(0) - 2);
+            }
+            else
+            {
+                storedWreaths += sum;
+                lilies.remove(0);
+                roses.remove(0);
+            }
+        }
+        int totalWreaths = wreaths + storedWreaths / 15;
+        if(totalWreaths >= 5)
+        {
+            System.out.printf("You made it, you are going to the competition with %d wreaths!%n", totalWreaths);
+        }
+        else
+        {
+            System.out.printf("You didn't make it, you need %d wreaths more!%n", 5 - totalWreaths);
+        }
+    }
+}
