@@ -1,0 +1,72 @@
+import java.util.Scanner;
+
+public class _02_Pawn_Wars
+{
+    public static void main(String[] args)
+    {
+        Scanner scanner = new Scanner(System.in);
+        //rowW , colW initial row , col of white pawn
+        //rowB , colB initial row , col of black pawn
+        int rowW = 0;
+        int colW = 0;
+        int rowB = 0;
+        int colB = 0;
+        int size = 8;
+        String[][] matrix = new String[size][size];
+        for(int row = 0; row < size; row++)
+        {
+            String input = scanner.next();
+            String[] arr = input.split("");
+            matrix[row] = arr;
+            if(input.contains("w"))
+            {
+                rowW = row;
+                colW = input.indexOf("w");
+            }
+            if(input.contains("b"))
+            {
+                rowB = row;
+                colB = input.indexOf("b");
+            }
+        }
+        int maxCol = Math.max(colW, colB);
+        int minCol = Math.min(colW, colB);
+        if(maxCol - minCol > 1 || rowW <= rowB)
+        {
+             printPromotedToQueen(rowW, colW, rowB, colB);
+             return;
+        }
+        else if(maxCol - minCol == 1 && rowW > rowB)
+        {
+            while(true)
+            {
+
+                if(rowW - rowB == 1)
+                {
+                    System.out.printf("Game over! White capture on %c%d.", colB + 97, 8 - rowB);
+                    return;
+                }
+                rowW--;
+
+                if(rowW - rowB == 1)
+                {
+                    System.out.printf("Game over! Black capture on %c%d.", colW + 97, 8 - rowW);
+                    return;
+                }
+                rowB++;
+            }
+
+        }
+    }
+    public static void printPromotedToQueen(int rowW, int colW, int rowB, int colB)
+    {
+        if(rowW <= 7 - rowB)
+        {
+            System.out.printf("Game over! White pawn is promoted to a queen at %c8.%n", (colW + 97));
+        }
+        else
+        {
+            System.out.printf("Game over! Black pawn is promoted to a queen at %c1.%n", (colB + 97));
+        }
+    }
+}
