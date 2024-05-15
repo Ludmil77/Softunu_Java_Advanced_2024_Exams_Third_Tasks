@@ -1,0 +1,104 @@
+import java.util.*;
+import java.util.stream.Collectors;
+
+public class _01_Blacksmith
+{
+    public static void main(String[] args)
+    {
+        Scanner scanner = new Scanner(System.in);
+        Map<String, Integer> items = new TreeMap<>();
+        List<Integer> steel = Arrays.stream(scanner.nextLine().split(" "))
+                .map(Integer::parseInt).collect(Collectors.toList());
+        List<Integer> carbon = Arrays.stream(scanner.nextLine().split(" "))
+                .map(Integer::parseInt).collect(Collectors.toList());
+        Collections.reverse(carbon);
+        int words = 0;
+        while(!steel.isEmpty() && !carbon.isEmpty())
+        {
+            int result = steel.get(0) + carbon.get(0);
+            if(result == 70)
+            {
+                if(!items.containsKey("Gladius"))
+                {
+                    items.put("Gladius", 0);
+                }
+                items.put("Gladius", items.get("Gladius") + 1);
+            }
+            else if(result == 80)
+            {
+                if(!items.containsKey("Shamshir"))
+                {
+                    items.put("Shamshir", 0);
+                }
+                items.put("Shamshir", items.get("Shamshir") + 1);
+            }
+            else if(result == 90)
+            {
+                if(!items.containsKey("Katana"))
+                {
+                    items.put("Katana", 0);
+                }
+                items.put("Katana", items.get("Katana") + 1);
+            }
+            else if(result == 110)
+            {
+                if(!items.containsKey("Sabre"))
+                {
+                    items.put("Sabre", 0);
+                }
+                items.put("Sabre", items.get("Sabre") + 1);
+            }
+            else
+            {
+                steel.remove(0);
+                carbon.set(0, carbon.get(0) + 5);
+                continue;
+            }
+            words++;
+            steel.remove(0);
+            carbon.remove(0);
+        }
+       if(!items.isEmpty())
+       {
+           System.out.printf("You have forged %d swords.%n", words);
+       }
+       if(items.isEmpty())
+       {
+           System.out.println("You did not have enough resources to forge a sword.");
+       }
+       if(steel.isEmpty())
+       {
+           System.out.println("Steel left: none");
+       }
+       if(!steel.isEmpty())
+       {
+           System.out.print("Steel left: ");
+           printCarbonsOrSteelLeft(steel);
+       }
+       if(carbon.isEmpty())
+       {
+           System.out.println("Carbon left: none");
+       }
+       if(!carbon.isEmpty())
+       {
+           System.out.print("Carbon left: ");
+           printCarbonsOrSteelLeft(carbon);
+       }
+       if(!items.isEmpty())
+       {
+           for(String key : items.keySet())
+           {
+               System.out.printf("%s: %d%n", key, items.get(key));
+           }
+       }
+    }
+    public static void printCarbonsOrSteelLeft(List<Integer> list)
+    {
+        List<String> temp = new ArrayList<>();
+        for(Integer l : list)
+        {
+            temp.add(String.valueOf(l));
+        }
+        System.out.println(String.join(", ", temp));
+    }
+}
