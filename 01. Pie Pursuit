@@ -1,0 +1,90 @@
+import java.util.*;
+import java.util.stream.Collectors;
+
+public class _01_Pie_Pursuit
+{
+    public static void main(String[] args)
+    {
+          Scanner scanner = new Scanner(System.in);
+          List<Integer> contestants = Arrays.stream(scanner.nextLine().split(" "))
+                  .map(Integer::parseInt).collect(Collectors.toList());
+        List<Integer> pies = Arrays.stream(scanner.nextLine().split(" "))
+                .map(Integer::parseInt).collect(Collectors.toList());
+        Collections.reverse(pies);
+        while(true)
+        {
+            if(contestants.isEmpty() || pies.isEmpty())
+            {
+                break;
+            }
+
+            if(contestants.get(0) > pies.get(0))
+            {
+                contestants.set(0, contestants.get(0) - pies.get(0));
+                if(contestants.size() > 1)
+                {
+                    contestants.add(contestants.get(0));
+                    contestants.remove(0);
+                }
+                pies.remove(0);
+            }
+            else if(contestants.get(0) == pies.get(0))
+            {
+                contestants.remove(0);
+                pies.remove(0);
+            }
+            else
+            {
+                pies.set(0, pies.get(0) - contestants.get(0));
+                if(pies.get(0) == 1 && pies.size() > 1)
+                {
+                    pies.set(1, pies.get(1) + 1);
+                    pies.remove(0);
+                }
+                contestants.remove(0);
+            }
+        }
+       
+        printFinalState(contestants, pies);
+    }
+    public static void printFinalState( List<Integer> contestants,  List<Integer> pies)
+    {
+        if(pies.isEmpty() && !contestants.isEmpty())
+        {
+            System.out.println("We will have to wait for more pies to be baked!");
+            System.out.print("Contestants left: ");
+            for(int i = 0; i < contestants.size(); i++)
+            {
+                if(i < contestants.size() - 1)
+                {
+                    System.out.print(contestants.get(i) + ", ");
+                }
+                else
+                {
+                    System.out.print(contestants.get(i));
+                }
+            }
+        }
+        else if(pies.isEmpty() && contestants.isEmpty())
+        {
+            System.out.println("We have a champion!");
+        }
+        else
+        {
+            Collections.reverse(pies);
+            System.out.println("Our contestants need to rest!");
+            System.out.print("Pies left: ");
+            for(int i = 0; i < pies.size(); i++)
+            {
+                if(i < pies.size() - 1)
+                {
+                    System.out.print(pies.get(i) + ", ");
+                }
+                else
+                {
+                    System.out.print(pies.get(i));
+                }
+            }
+        }
+    }
+}
