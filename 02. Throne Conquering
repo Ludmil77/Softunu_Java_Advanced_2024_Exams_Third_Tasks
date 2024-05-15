@@ -1,0 +1,102 @@
+import java.util.Scanner;
+
+public class _02_Throne_Conquering
+{
+    public static void main(String[] args)
+    {
+        Scanner scanner = new Scanner(System.in);
+        int energy = Integer.parseInt(scanner.nextLine());
+        int rows = Integer.parseInt(scanner.nextLine());
+        int cols = 0;
+        int rowP = 0;
+        int colP = 0;
+        String[][] matrix = new String[rows][];
+        for(int row = 0; row < rows; row++)
+        {
+            String input = scanner.nextLine();
+            String[] arr = input.split("");
+            cols = arr.length;
+            matrix[row] = arr;
+            if(input.contains("P"))
+            {
+                rowP = row;
+                colP = input.indexOf("P");
+            }
+        }
+        int rowEnemy = 0;
+        int colEnemy = 0;
+        matrix[rowP][colP] = "-";
+
+        while(true)
+        {
+            String[] comArgs = scanner.nextLine().split("\\s+");
+            String command = comArgs[0];
+            rowEnemy = Integer.parseInt(comArgs[1]);
+            colEnemy = Integer.parseInt(comArgs[2]);
+            int previousRow = rowP;
+            int previousCol = colP;
+            matrix[rowEnemy][colEnemy] = "S";
+            energy--;
+            if(command.equals("up"))
+            {
+                rowP--;
+            }
+            if(command.equals("down"))
+            {
+                rowP++;
+            }
+            if(command.equals("left"))
+            {
+                colP--;
+            }
+            if(command.equals("right"))
+            {
+                colP++;
+            }
+
+            if(rowP < 0 || rowP > rows - 1 || colP < 0 || colP > cols - 1)
+            {
+                rowP = previousRow;
+                colP = previousCol;
+
+            }
+            if(matrix[rowP][colP].equals("S"))
+            {
+                energy -= 2;
+                if(energy <= 0)
+                {
+                    System.out.printf("Paris died at %d;%d.%n", rowP, colP);
+                    matrix[rowP][colP] = "X";
+                    break;
+                }
+                matrix[rowP][colP] = "-";
+            }
+            if(matrix[rowP][colP].equals("H"))
+            {
+                matrix[rowP][colP] = "-";
+                System.out.print("Paris has successfully abducted Helen! ");
+                System.out.printf("Energy left: %d%n", energy);
+                break;
+            }
+            if(energy <= 0)
+            {
+                System.out.printf("Paris died at %d;%d.%n", rowP, colP);
+                matrix[rowP][colP] = "X";
+                break;
+            }
+
+        }
+        printFinalState(matrix, rows, cols);
+    }
+    public static void printFinalState(String[][] matrix, int rows, int cols)
+    {
+        for(int row = 0; row < rows; row++)
+        {
+            for(int col = 0; col < cols; col++)
+            {
+                System.out.print(matrix[row][col]);
+            }
+            System.out.println();
+        }
+    }
+}
