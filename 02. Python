@@ -1,0 +1,124 @@
+import java.util.Scanner;
+
+public class _02_Python
+{
+    public static void main(String[] args)
+    {
+        Scanner scanner = new Scanner(System.in);
+         int size = Integer.parseInt(scanner.nextLine());
+         String[] commands = scanner.nextLine().split(", ");
+         int rowS = 0;
+         int colS = 0;
+         int counterFood = 0;
+         int pythonLength = 1;
+         String[][] matrix = new String[size][size];
+         for(int row = 0; row < size; row++)
+         {
+             String input = scanner.nextLine().replace(" ", "");
+             String[] arr = input.split("");
+             matrix[row] = arr;
+             if(input.contains("s"))
+             {
+                 rowS = row;
+                 colS = input.indexOf("s");
+             }
+         }
+         counterFood = checkFoodCounter(matrix, size, counterFood);
+         for(int i = 0; i < commands.length; i++)
+         {
+             String command = commands[i];
+             if(command.equals("up"))
+             {
+                 rowS--;
+                 rowS = checkIfRowIsValid(rowS, command, size);
+             }
+             if(command.equals("down"))
+             {
+                 rowS++;
+                 rowS = checkIfRowIsValid(rowS, command, size);
+             }
+             if(command.equals("left"))
+             {
+                 colS--;
+                 colS = checkIfColIsValid(colS, command, size);
+             }
+             if(command.equals("right"))
+             {
+                 colS++;
+                 colS = checkIfColIsValid(colS, command, size);
+             }
+             if(matrix[rowS][colS].equals("f"))
+             {
+                 pythonLength++;
+                 counterFood--;
+                 if(counterFood == 0)
+                 {
+                     break;
+                 }
+             }
+             if(matrix[rowS][colS].equals("e"))
+             {
+                 System.out.println("You lose! Killed by an enemy!");
+                 return;
+             }
+         }
+         if(counterFood == 0)
+         {
+             System.out.printf("You win! Final python length is %d%n", pythonLength);
+         }
+         else
+         {
+             System.out.printf("You lose! There is still %d food to be eaten.%n", counterFood);
+         }
+    }
+    public static Integer checkIfRowIsValid(int row, String command, int size)
+    {
+        if(command.equals("up"))
+        {
+            if(row < 0)
+            {
+                row = size - 1;
+            }
+        }
+        else if(command.equals("down"))
+        {
+            if(row > size - 1)
+            {
+                row = 0;
+            }
+        }
+        return row;
+    }
+    public static Integer checkIfColIsValid(int col, String command, int size)
+    {
+        if(command.equals("left"))
+        {
+            if(col < 0)
+            {
+                col = size - 1;
+            }
+        }
+        else if(command.equals("right"))
+        {
+            if(col > size - 1)
+            {
+                col = 0;
+            }
+        }
+        return col;
+    }
+    public static Integer checkFoodCounter(String[][] matrix, int size, int counterFood)
+    {
+        for(int row = 0; row < size; row++)
+        {
+            for(int col = 0; col < size; col++)
+            {
+                if(matrix[row][col].equals("f"))
+                {
+                    counterFood++;
+                }
+            }
+        }
+        return counterFood;
+    }
+}
