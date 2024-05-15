@@ -1,0 +1,96 @@
+import java.util.*;
+import java.util.stream.Collectors;
+
+public class _01_Autumn_Cocktails
+{
+    public static void main(String[] args)
+    {
+         Scanner scanner = new Scanner(System.in);
+         Map<String, Integer> cocktails = new TreeMap<>();
+        List<Integer> buckets = Arrays.stream(scanner.nextLine().split(" "))
+                .map(Integer::parseInt).collect(Collectors.toList());
+        buckets = removeNonPositivesValuesFromBuckets(buckets);
+        List<Integer> freshness = Arrays.stream(scanner.nextLine().split(" "))
+                .map(Integer::parseInt).collect(Collectors.toList());
+        Collections.reverse(freshness);
+        while(!buckets.isEmpty() && !freshness.isEmpty())
+        {
+            int result = buckets.get(0) * freshness.get(0);
+            if(result == 150)
+            {
+                if(!cocktails.containsKey("Pear Sour"))
+                {
+                    cocktails.put("Pear Sour", 0);
+                }
+                cocktails.put("Pear Sour", cocktails.get("Pear Sour") + 1);
+            }
+            else if(result == 250)
+            {
+                if(!cocktails.containsKey("The Harvest"))
+                {
+                    cocktails.put("The Harvest", 0);
+                }
+                cocktails.put("The Harvest", cocktails.get("The Harvest") + 1);
+            }
+            else if(result == 300)
+            {
+                if(!cocktails.containsKey("Apple Hinny"))
+                {
+                    cocktails.put("Apple Hinny", 0);
+                }
+                cocktails.put("Apple Hinny", cocktails.get("Apple Hinny") + 1);
+            }
+            else if(result == 400)
+            {
+                if(!cocktails.containsKey("High Fashion"))
+                {
+                    cocktails.put("High Fashion", 0);
+                }
+                cocktails.put("High Fashion", cocktails.get("High Fashion") + 1);
+            }
+            else
+            {
+                freshness.remove(0);
+                int currentBuckets = buckets.get(0) + 5;
+                buckets.add(currentBuckets);
+                buckets.remove(0);
+                continue;
+            }
+            buckets.remove(0);
+            freshness.remove(0);
+        }
+        printFinalState(cocktails, buckets);
+    }
+    public static List<Integer> removeNonPositivesValuesFromBuckets( List<Integer> buckets)
+    {
+        List<Integer> temp = new ArrayList<>();
+        for(Integer bucket : buckets)
+        {
+            if(bucket > 0)
+            {
+                temp.add(bucket);
+            }
+        }
+        return temp;
+    }
+    public static void printFinalState(Map<String, Integer> cocktails,  List<Integer> buckets)
+    {
+        if(cocktails.size() == 4)
+        {
+            System.out.println("It's party time! The cocktails are ready!");
+        }
+        if(cocktails.size() < 4)
+        {
+            System.out.println("What a pity! You didn't manage to prepare all cocktails.");
+        }
+        if(!buckets.isEmpty())
+        {
+            int sum = buckets.stream().mapToInt(Integer::intValue).sum();
+            System.out.printf("Ingredients left: %d%n", sum);
+        }
+        for(String key : cocktails.keySet())
+        {
+            System.out.printf(" # %s --> %d%n", key, cocktails.get(key));
+        }
+    }
+}
