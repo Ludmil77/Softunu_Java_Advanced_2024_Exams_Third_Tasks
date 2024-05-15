@@ -1,0 +1,79 @@
+import java.util.Scanner;
+
+public class _02_Book_Worm
+{
+    public static void main(String[] args)
+    {
+         Scanner scanner  = new Scanner(System.in);
+         String initial = scanner.nextLine();
+         int size = Integer.parseInt(scanner.nextLine());
+         int rowP = 0;
+         int colP = 0;
+         String[][] matrix = new String[size][size];
+         for(int row = 0; row < size; row++)
+         {
+             String input = scanner.nextLine();
+             String[] arr = input.split("");
+             matrix[row] = arr;
+             if(input.contains("P"))
+             {
+                 rowP = row;
+                 colP = input.indexOf("P");
+             }
+         }
+         String command = scanner.nextLine();
+         while(!command.equals("end"))
+         {
+             int previousRow = rowP;
+             int previousCol = colP;
+             matrix[rowP][colP] = "-";
+             if(command.equals("up"))
+             {
+                 rowP--;
+             }
+             if(command.equals("down"))
+             {
+                 rowP++;
+             }
+             if(command.equals("left"))
+             {
+                 colP--;
+             }
+             if(command.equals("right"))
+             {
+                 colP++;
+             }
+             boolean isInvalidRowCol = rowP < 0 || rowP > size - 1 || colP < 0 || colP > size - 1;
+             if(isInvalidRowCol)
+             {
+                 if(!initial.isEmpty())
+                 {
+                     initial = initial.substring(0, initial.length() - 1);
+                 }
+
+                 rowP = previousRow;
+                 colP = previousCol;
+             }
+             if(Character.isLetter(matrix[rowP][colP].charAt(0)))
+             {
+                 initial += matrix[rowP][colP];
+             }
+
+             command = scanner.nextLine();
+         }
+         matrix[rowP][colP] = "P";
+         System.out.println(initial);
+         printFinalState(matrix, size);
+    }
+    public static void printFinalState(String[][] matrix, int size)
+    {
+        for(int row = 0; row < size; row++)
+        {
+            for(int col = 0; col < size; col++)
+            {
+                System.out.print(matrix[row][col]);
+            }
+            System.out.println();
+        }
+    }
+}
