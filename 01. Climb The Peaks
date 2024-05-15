@@ -1,0 +1,58 @@
+import java.util.*;
+import java.util.stream.Collectors;
+
+public class _01_Climb_The_Peaks
+{
+    public static void main(String[] args)
+    {
+          Scanner scanner = new Scanner(System.in);
+        List<String> peaks = new ArrayList<>();
+        List<String> conqueredPeaks = new ArrayList<>();
+        List<Integer> levels = new ArrayList<>();
+        levels.add(80); levels.add(90); levels.add(100); levels.add(60); levels.add(70);
+        peaks.add("Vihren"); peaks.add("Kutelo"); peaks.add("Banski Suhodol"); peaks.add("Polezhan"); peaks.add("Kamenitza");
+        List<Integer> foods = Arrays.stream(scanner.nextLine().split(", "))
+                .map(Integer::parseInt).collect(Collectors.toList());
+        List<Integer> stamina = Arrays.stream(scanner.nextLine().split(", "))
+                .map(Integer::parseInt).collect(Collectors.toList());
+        Collections.reverse(foods);
+        for(int i = 0; i < 7; i++)
+        {
+             int sum = foods.get(0) + stamina.get(0);
+             if(sum >= levels.get(0))
+             {
+                 levels.remove(0);
+                 conqueredPeaks.add(peaks.get(0));
+                 peaks.remove(0);
+                 foods.remove(0);
+                 stamina.remove(0);
+                 if(conqueredPeaks.size() == 5)
+                 {
+                     break;
+                 }
+             }
+             else
+             {
+                 foods.remove(0);
+                 stamina.remove(0);
+             }
+        }
+        if(conqueredPeaks.size() == 5)
+        {
+            System.out.println("Alex did it! He climbed all top five Pirin peaks in one week -> @FIVEinAWEEK");
+        }
+        if(conqueredPeaks.size() < 5)
+        {
+            System.out.println("Alex failed! He has to organize his journey better next time -> @PIRINWINS");
+        }
+        if(!conqueredPeaks.isEmpty())
+        {
+            System.out.println("Conquered peaks:");
+            for(String peak : conqueredPeaks)
+            {
+                System.out.println(peak);
+            }
+        }
+    }
+
+}
