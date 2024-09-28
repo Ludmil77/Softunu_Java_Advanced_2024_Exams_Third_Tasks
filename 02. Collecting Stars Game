@@ -1,0 +1,102 @@
+import java.util.Arrays;
+import java.util.List;
+import java.util.Scanner;
+import java.util.stream.Collectors;
+
+public class _02_Collecting_Stars_Game
+{
+    public static void main(String[] args)
+    {
+        Scanner scanner = new Scanner(System.in);
+        int size = Integer.parseInt(scanner.nextLine());
+        int stars = 2;
+        String[][] matrix = new String[size][size];
+        int currentRow = 0;
+        int currentCol = 0;
+        for(int row = 0; row < size; row++)
+        {
+            String[] arr = scanner.nextLine().split(" ");
+            matrix[row] = arr;
+        }
+        currentRow = findPlayerInitialPosition(matrix, size)[0];
+        currentCol = findPlayerInitialPosition(matrix, size)[1];
+        matrix[currentRow][currentCol] = ".";
+        String command = scanner.nextLine();
+        while(command != null)
+        {
+
+            int previousRow = currentRow;
+            int previousCol = currentCol;
+            switch (command)
+            {
+                case "up" -> currentRow--;
+                case "down" -> currentRow++;
+                case "left" -> currentCol--;
+                case "right" -> currentCol++;
+            }
+            boolean isRowInvalid = currentRow < 0 || currentRow >= size;
+            boolean isColInvalid = currentCol < 0 || currentCol >= size;
+            if(isRowInvalid || isColInvalid)
+            {
+                currentRow = 0;
+                currentCol = 0;
+
+            }
+            if(matrix[currentRow][currentCol].equals("#"))
+            {
+                stars--;
+                currentRow = previousRow;
+                currentCol = previousCol;
+                if(stars == 0)
+                {
+                    System.out.println("Game over! You are out of any stars.");
+                    break;
+                }
+
+                command = scanner.nextLine();
+                continue;
+            }
+            if(matrix[currentRow][currentCol].equals("*"))
+            {
+                stars++;
+                if(stars == 10)
+                {
+                    System.out.println("You won! You have collected 10 stars.");
+                    break;
+                }
+                matrix[currentRow][currentCol] = ".";
+            }
+            command = scanner.nextLine();
+        }
+        matrix[currentRow][currentCol] = "P";
+        System.out.printf("Your final position is [%d, %d]%n", currentRow, currentCol);
+        printFinalMatrix(matrix, size);
+    }
+    public static int[] findPlayerInitialPosition(String[][] matrix, int size)
+    {
+        int[] coordinates = new int[2];
+        for(int row = 0; row < size; row++)
+        {
+            for(int col = 0; col < size; col++)
+            {
+                if(matrix[row][col].equals("P"))
+                {
+                    coordinates[0] = row;
+                    coordinates[1] = col;
+                }
+            }
+        }
+        return coordinates;
+    }
+    public static void printFinalMatrix(String[][] matrix, int size)
+    {
+        for(int row = 0; row < size; row++)
+        {
+            for(int col = 0; col < size; col++)
+            {
+                System.out.print(matrix[row][col] + " ");
+            }
+            System.out.println();
+        }
+    }
+}
