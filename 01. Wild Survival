@@ -1,0 +1,68 @@
+import java.util.*;
+import java.util.stream.Collectors;
+
+//TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
+// click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
+public class _01_Wild_Survival
+{
+    public static void main(String[] args)
+    {
+        Scanner scanner = new Scanner(System.in);
+        List<Integer> bees = Arrays.stream(scanner.nextLine().split(" "))
+                .map(Integer::parseInt).collect(Collectors.toList());
+        List<Integer> eaters = Arrays.stream(scanner.nextLine().split(" "))
+                .map(Integer::parseInt).collect(Collectors.toList());
+        Collections.reverse(eaters);
+        while(!bees.isEmpty() && !eaters.isEmpty())
+        {
+            int currentBee = bees.getFirst();
+            int currentEater = eaters.getFirst();
+            if(currentEater * 7 > currentBee)
+            {
+                eaters.set(0, eaters.getFirst() - currentBee / 7);
+
+                bees.removeFirst();
+            }
+            else if(currentEater * 7 < currentBee)
+            {
+                bees.set(0, bees.getFirst() - currentEater * 7);
+                bees.addLast(bees.getFirst());
+                bees.removeFirst();
+                eaters.removeFirst();
+            }
+
+
+           else
+            {
+                bees.removeFirst();
+                eaters.removeFirst();
+            }
+        }
+        System.out.println("The final battle is over!");
+        if(bees.isEmpty() && eaters.isEmpty())
+        {
+            System.out.println("But no one made it out alive!");
+        }
+        else if(!bees.isEmpty())
+        {
+
+            System.out.print("Bee groups left: " + String.join(", ", returnListIntToStringList(bees)));
+
+        }
+        else
+        {
+            Collections.reverse(eaters);
+            System.out.print("Bee-eater groups left: " + String.join(", ", returnListIntToStringList((eaters))));
+
+        }
+    }
+    public static List<String> returnListIntToStringList(List<Integer> integers)
+    {
+        List<String> strings = new ArrayList<>();
+        for(Integer integer : integers)
+        {
+            strings.add(String.valueOf(integer));
+        }
+        return strings;
+    }
+}
