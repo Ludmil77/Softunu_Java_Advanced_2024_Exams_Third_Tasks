@@ -1,0 +1,134 @@
+import java.util.Scanner;
+import java.util.Iterator;
+public class _02_Beesy
+{
+    public static void main(String[] args)
+    {
+        Scanner scanner = new Scanner(System.in);
+        int size = Integer.parseInt(scanner.nextLine());
+        String[][] matrix = new String[size][size];
+        int currentRow = 0;
+        int currentCol = 0;
+        int energy = 15;
+        int collectedNectar = 0;
+        boolean isOutOfEnergy = false;
+        boolean isHive = false;
+        for(int row = 0; row < size; row++)
+        {
+            String input = scanner.nextLine();
+            String[] arr = input.split("");
+            matrix[row] = arr;
+            int countOutOfEnergy = 0;
+            if(input.contains("B"))
+            {
+                int index = input.indexOf("B");
+                currentRow = row;
+                currentCol = index;
+            }
+        }
+        matrix[currentRow][currentCol] = "-";
+
+        while(true)
+        {
+            if(energy <= 0 && collectedNectar < 30 && !matrix[currentRow][currentCol].equals("H"))
+            {
+            System.out.println("This is the end! Beesy ran out of energy.");
+            break;
+            }
+            else if(energy <= 0 && collectedNectar >= 30 && !matrix[currentRow][currentCol].equals("H"))
+            {
+            if(isOutOfEnergy)
+            {
+                System.out.println("This is the end! Beesy ran out of energy.");
+                break;
+            }
+            energy += collectedNectar - 30;
+            collectedNectar = 30;
+            isOutOfEnergy = true;
+            matrix[currentRow][currentCol] = "-";
+            }
+            String command = scanner.nextLine();
+            energy--;
+            switch (command)
+            {
+                case "up" -> currentRow = checkMoveCommandForOppositePosition(command, currentRow, currentCol, size);
+                case "down" -> currentRow = checkMoveCommandForOppositePosition(command, currentRow, currentCol, size);
+                case "left" -> currentCol = checkMoveCommandForOppositePosition(command, currentRow, currentCol, size);
+                case "right" -> currentCol = checkMoveCommandForOppositePosition(command, currentRow, currentCol, size);
+            }
+
+            if(Character.isDigit(matrix[currentRow][currentCol].charAt(0)))
+            {
+                collectedNectar += Integer.parseInt(matrix[currentRow][currentCol]);
+                matrix[currentRow][currentCol] = "-";
+            }
+
+            else if(matrix[currentRow][currentCol].equals("H"))
+            {
+                if(collectedNectar >= 30)
+                {
+                    System.out.printf("Great job, Beesy! The hive is full. Energy left: %d%n", energy);
+                }
+                else
+                {
+                    System.out.println("Beesy did not manage to collect enough nectar.");
+                }
+
+                break;
+            }
+
+        }
+
+        matrix[currentRow][currentCol] = "B";
+        printFinalMatrix(matrix);
+    }
+    public static int checkMoveCommandForOppositePosition(String command, int currentRow, int currentCol, int size)
+    {
+       if(command.equals("up"))
+       {
+           currentRow--;
+           if(currentRow < 0)
+           {
+               currentRow = size - 1;
+           }
+           return currentRow;
+       }
+       else if(command.equals("down"))
+       {
+           currentRow++;
+           if(currentRow > size - 1)
+           {
+               currentRow = 0;
+           }
+           return currentRow;
+       }
+       else if(command.equals("left"))
+       {
+           currentCol--;
+           if(currentCol < 0)
+           {
+               currentCol = size - 1;
+           }
+       }
+       else if(command.equals("right"))
+       {
+           currentCol++;
+           if(currentCol > size - 1)
+           {
+               currentCol = 0;
+           }
+       }
+       return currentCol;
+    }
+    public static void printFinalMatrix(String[][] matrix)
+    {
+        for(int row = 0; row < matrix.length; row++)
+        {
+            for(int col = 0; col < matrix[row].length; col++)
+            {
+                System.out.print(matrix[row][col]);
+            }
+            System.out.println();
+        }
+    }
+}
